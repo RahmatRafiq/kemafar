@@ -1,6 +1,6 @@
 /**
  * Card Component
- * Reusable card container
+ * Reusable card container with improved hover effects
  */
 
 import React from 'react';
@@ -8,19 +8,23 @@ import { cn } from '@/shared/utils/cn';
 
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
-  variant?: 'default' | 'bordered' | 'elevated';
+  variant?: 'default' | 'bordered' | 'elevated' | 'interactive';
+  hover?: boolean;
 }
 
 export const Card = React.forwardRef<HTMLDivElement, CardProps>(
-  ({ className, variant = 'default', children, ...props }, ref) => {
+  ({ className, variant = 'default', hover = false, children, ...props }, ref) => {
     const variants = {
-      default: 'bg-white rounded-lg',
-      bordered: 'bg-white border border-gray-200 rounded-lg',
-      elevated: 'bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow',
+      default: 'bg-white rounded-xl',
+      bordered: 'bg-white border border-gray-200 rounded-xl hover:border-primary-200 transition-colors',
+      elevated: 'bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300',
+      interactive: 'bg-white rounded-xl shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 cursor-pointer border-2 border-transparent hover:border-primary-200',
     };
 
+    const hoverClass = hover ? 'hover:shadow-xl hover:-translate-y-1 transition-all duration-300' : '';
+
     return (
-      <div ref={ref} className={cn(variants[variant], className)} {...props}>
+      <div ref={ref} className={cn(variants[variant], hoverClass, className)} {...props}>
         {children}
       </div>
     );

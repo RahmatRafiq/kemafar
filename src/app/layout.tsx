@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Plus_Jakarta_Sans, Poppins } from 'next/font/google';
 import './globals.css';
 import { SITE_CONFIG } from '@/lib/constants';
 import { Header } from '@/shared/components/layout/Header';
@@ -7,7 +7,18 @@ import { Footer } from '@/shared/components/layout/Footer';
 import { WhatsAppButton } from '@/shared/components/ui/WhatsAppButton';
 import { Toaster } from 'sonner';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-geist-sans' });
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  variable: '--font-sans',
+  display: 'swap',
+});
+
+const poppins = Poppins({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800'],
+  variable: '--font-heading',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_CONFIG.url),
@@ -62,7 +73,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id">
-      <body className={`${inter.variable} antialiased`}>
+      <body className={`${plusJakarta.variable} ${poppins.variable} font-sans antialiased`}>
         <Header />
         <main className="min-h-screen">{children}</main>
         <Footer />
