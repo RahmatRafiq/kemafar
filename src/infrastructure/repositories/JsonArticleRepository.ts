@@ -4,22 +4,11 @@
 
 import { Article, ArticleListItem, ArticleCategory } from '@/core/entities/Article';
 import { IArticleRepository } from '@/core/repositories/IArticleRepository';
-import { SITE_CONFIG } from '@/lib/constants';
+import articlesData from '../../../public/data/articles.json';
 
 export class JsonArticleRepository implements IArticleRepository {
   private async fetchArticles(): Promise<Article[]> {
-    // Use relative URL in browser, absolute URL during build
-    const url = typeof window !== 'undefined'
-      ? '/data/articles.json'
-      : `${process.env.NEXT_PUBLIC_SITE_URL || SITE_CONFIG.url}/data/articles.json`;
-
-    const response = await fetch(url, {
-      cache: 'no-store',
-    });
-    if (!response.ok) {
-      throw new Error('Failed to fetch articles');
-    }
-    return response.json();
+    return articlesData as Article[];
   }
 
   async getAll(): Promise<ArticleListItem[]> {

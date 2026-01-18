@@ -4,22 +4,11 @@
 
 import { Member, MemberListItem, MemberStatus } from '@/core/entities/Member';
 import { IMemberRepository } from '@/core/repositories/IMemberRepository';
-import { SITE_CONFIG } from '@/lib/constants';
+import membersData from '../../../public/data/members.json';
 
 export class JsonMemberRepository implements IMemberRepository {
   private async fetchMembers(): Promise<Member[]> {
-    // Use relative URL in browser, absolute URL during build
-    const url = typeof window !== 'undefined'
-      ? '/data/members.json'
-      : `${process.env.NEXT_PUBLIC_SITE_URL || SITE_CONFIG.url}/data/members.json`;
-
-    const response = await fetch(url, {
-      cache: 'no-store',
-    });
-    if (!response.ok) {
-      throw new Error('Failed to fetch members');
-    }
-    return response.json();
+    return membersData as Member[];
   }
 
   async getAll(): Promise<MemberListItem[]> {
