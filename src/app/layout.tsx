@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Plus_Jakarta_Sans, Poppins } from 'next/font/google';
 import './globals.css';
 import { SITE_CONFIG } from '@/lib/constants';
-import { Header } from '@/shared/components/layout/Header';
+import { FloatingDock } from '@/shared/components/layout/FloatingDock';
 import { Footer } from '@/shared/components/layout/Footer';
 import { WhatsAppButton } from '@/shared/components/ui/WhatsAppButton';
 import { Toaster } from 'sonner';
@@ -81,10 +81,10 @@ export default function RootLayout({
   return (
     <html lang="id" className="scroll-smooth">
       <body className={`${plusJakarta.variable} ${poppins.variable} font-sans antialiased`}>
-        <Header />
         <PageTransition>
-          <main className="min-h-screen">{children}</main>
+          <main className="min-h-screen pb-32">{children}</main>
         </PageTransition>
+        <FloatingDock />
         <Footer />
         <WhatsAppButton />
         <Toaster position="top-right" richColors />
