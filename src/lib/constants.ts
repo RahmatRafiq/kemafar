@@ -9,27 +9,11 @@ export const ROUTES = {
   home: '/',
   about: '/about',
   gallery: '/gallery',
-  products: '/products',
-  booking: '/booking',
-} as const;
-
-export const PRODUCT_CATEGORIES = {
-  fruits: 'Buah-buahan',
-  vegetables: 'Sayuran',
-  flowers: 'Bunga',
-  processed: 'Produk Olahan',
 } as const;
 
 export const GALLERY_CATEGORIES = {
-  fruits: 'Buah-buahan',
-  vegetables: 'Sayuran',
-  flowers: 'Bunga',
   activities: 'Aktivitas',
+  events: 'Event',
   facilities: 'Fasilitas',
-} as const;
-
-export const PACKAGE_TYPES = {
-  educational: 'Paket Edukasi',
-  family: 'Paket Keluarga',
-  custom: 'Paket Custom',
+  organization: 'Organisasi',
 } as const;

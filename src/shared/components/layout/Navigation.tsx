@@ -15,8 +15,6 @@ const navItems = [
   { label: 'Beranda', href: ROUTES.home },
   { label: 'Tentang Kami', href: ROUTES.about },
   { label: 'Galeri', href: ROUTES.gallery },
-  { label: 'Produk', href: ROUTES.products },
-  { label: 'Booking', href: ROUTES.booking },
 ];
 
 export function Navigation() {
