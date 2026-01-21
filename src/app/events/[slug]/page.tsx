@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { JsonEventRepository } from '@/infrastructure/repositories/JsonEventRepository';
+import { RepositoryFactory } from '@/infrastructure/repositories/RepositoryFactory';
 import { EVENT_CATEGORIES } from '@/lib/constants';
 import { EVENT_STATUS_COLORS, EVENT_STATUS_LABELS } from '@/lib/constants/event';
 import { MarkdownContent } from '@/shared/components/ui/MarkdownContent';
@@ -15,7 +15,7 @@ type Props = {
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const eventRepo = new JsonEventRepository();
+  const eventRepo = RepositoryFactory.getEventRepository();
   const event = await eventRepo.getBySlug(params.slug);
 
   if (!event) {
@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function EventDetailPage({ params }: Props) {
-  const eventRepo = new JsonEventRepository();
+  const eventRepo = RepositoryFactory.getEventRepository();
   const event = await eventRepo.getBySlug(params.slug);
 
   if (!event) {

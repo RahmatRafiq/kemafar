@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { JsonArticleRepository } from '@/infrastructure/repositories/JsonArticleRepository';
+import { RepositoryFactory } from '@/infrastructure/repositories/RepositoryFactory';
 import { ARTICLE_CATEGORIES } from '@/lib/constants';
 import { MarkdownContent } from '@/shared/components/ui/MarkdownContent';
 import { Calendar, Tag, ArrowLeft, Eye } from 'lucide-react';
@@ -14,7 +14,7 @@ type Props = {
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const articleRepo = new JsonArticleRepository();
+  const articleRepo = RepositoryFactory.getArticleRepository();
   const article = await articleRepo.getBySlug(params.slug);
 
   if (!article) {
@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ArticleDetailPage({ params }: Props) {
-  const articleRepo = new JsonArticleRepository();
+  const articleRepo = RepositoryFactory.getArticleRepository();
   const article = await articleRepo.getBySlug(params.slug);
 
   if (!article) {

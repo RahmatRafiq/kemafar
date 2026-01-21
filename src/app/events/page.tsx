@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { z } from 'zod';
-import { JsonEventRepository } from '@/infrastructure/repositories/JsonEventRepository';
+import { RepositoryFactory } from '@/infrastructure/repositories/RepositoryFactory';
 import { EventsGrid } from '@/features/events/components/EventsGrid';
 import { SegmentedControl } from '@/shared/components/ui/SegmentedControl';
 import { EVENT_STATUS_COLORS, EVENT_STATUS_LABELS } from '@/lib/constants/event';
@@ -19,7 +19,7 @@ export default async function EventsPage({
 }: {
   searchParams: { status?: string };
 }) {
-  const eventRepo = new JsonEventRepository();
+  const eventRepo = RepositoryFactory.getEventRepository();
 
   // Validate and sanitize status parameter
   let validatedStatus: EventStatus | undefined;

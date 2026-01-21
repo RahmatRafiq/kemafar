@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import { User } from 'lucide-react';
-import { JsonMemberRepository } from '@/infrastructure/repositories/JsonMemberRepository';
+import { RepositoryFactory } from '@/infrastructure/repositories/RepositoryFactory';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import type { MemberListItem } from '@/core/entities/Member';
@@ -20,7 +20,7 @@ export default function MembersPage({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const memberRepo = new JsonMemberRepository();
+        const memberRepo = RepositoryFactory.getMemberRepository();
         let fetchedMembers = await memberRepo.getByStatus('active');
 
         if (batch) {

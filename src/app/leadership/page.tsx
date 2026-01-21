@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { JsonLeadershipRepository } from '@/infrastructure/repositories/JsonLeadershipRepository';
+import { RepositoryFactory } from '@/infrastructure/repositories/RepositoryFactory';
 import { DIVISIONS } from '@/lib/constants';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { useEffect, useState, useRef } from 'react';
@@ -32,7 +32,7 @@ export default function LeadershipPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const leadershipRepo = new JsonLeadershipRepository();
+        const leadershipRepo = RepositoryFactory.getLeadershipRepository();
         const core = await leadershipRepo.getCore();
         const all = await leadershipRepo.getAll();
 

@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import { z } from 'zod';
-import { JsonArticleRepository } from '@/infrastructure/repositories/JsonArticleRepository';
+import { RepositoryFactory } from '@/infrastructure/repositories/RepositoryFactory';
 import { ARTICLE_CATEGORIES } from '@/lib/constants';
 import { ArticlesGrid } from '@/features/articles/components/ArticlesGrid';
 import { SegmentedControl } from '@/shared/components/ui/SegmentedControl';
@@ -19,7 +19,7 @@ export default async function ArticlesPage({
 }: {
   searchParams: { category?: string };
 }) {
-  const articleRepo = new JsonArticleRepository();
+  const articleRepo = RepositoryFactory.getArticleRepository();
 
   // Validate and sanitize category parameter
   let validatedCategory: ArticleCategory | undefined;
