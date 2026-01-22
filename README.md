@@ -262,6 +262,7 @@ Features:
 
 - [Admin Panel Guide](docs/admin-panel-setup.md)
 - [Database Migration Guide](supabase/migrations/README.md)
+- [Transformation Plan](docs/TRANSFORMATION_PLAN.md) - Roadmap to multi-purpose starter template
 
 ## 🤝 Contributing
 
