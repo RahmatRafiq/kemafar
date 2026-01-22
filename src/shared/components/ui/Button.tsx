@@ -35,10 +35,10 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     // If asChild is true, clone the child element and apply button styles
     if (asChild && React.isValidElement(children)) {
-      return React.cloneElement(children, {
-        className: cn(buttonClasses, children.props.className),
+      return React.cloneElement(children as React.ReactElement<{ className?: string }>, {
+        className: cn(buttonClasses, (children as React.ReactElement<{ className?: string }>).props.className),
         ...props,
-      } as any);
+      });
     }
 
     return (

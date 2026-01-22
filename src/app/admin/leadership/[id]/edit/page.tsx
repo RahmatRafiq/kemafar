@@ -176,7 +176,7 @@ export default function EditLeadershipPage() {
     try {
       setLoading(true);
 
-      const socialMedia: any = {};
+      const socialMedia: Record<string, string> = {};
       if (formData.social_media_instagram) socialMedia.instagram = formData.social_media_instagram;
       if (formData.social_media_linkedin) socialMedia.linkedin = formData.social_media_linkedin;
       if (formData.social_media_twitter) socialMedia.twitter = formData.social_media_twitter;

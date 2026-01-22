@@ -91,8 +91,9 @@ export default function EventsPage() {
 
       setEvents(data || []);
       setTotalCount(count || 0);
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to load events');
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to load events';
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -112,11 +113,12 @@ export default function EventsPage() {
       if (error) throw error;
 
       toast.success('Event deleted successfully');
-    } catch (error: any) {
+    } catch (error) {
       // Rollback on error
       setEvents(previousEvents);
       setTotalCount((prev) => prev + 1);
-      toast.error(error.message || 'Failed to delete event');
+      const message = error instanceof Error ? error.message : 'Failed to delete event';
+      toast.error(message);
     }
   }
 
@@ -146,9 +148,8 @@ export default function EventsPage() {
 
     return (
       <span
-        className={`px-2 py-1 text-xs font-medium rounded-full ${
-          styles[status as keyof typeof styles] || styles.upcoming
-        }`}
+        className={`px-2 py-1 text-xs font-medium rounded-full ${styles[status as keyof typeof styles] || styles.upcoming
+          }`}
       >
         {status.charAt(0).toUpperCase() + status.slice(1)}
       </span>
@@ -249,50 +250,50 @@ export default function EventsPage() {
                 </thead>
                 <tbody>
                   {events.map((event) => (
-                  <tr key={event.id} className="border-b border-gray-100 hover:bg-gray-50">
-                    <td className="py-3 px-4">
-                      <div className="font-medium text-gray-900">{event.title}</div>
-                      <div className="text-sm text-gray-500">{event.slug}</div>
-                    </td>
-                    <td className="py-3 px-4 text-gray-700">{event.organizer.name}</td>
-                    <td className="py-3 px-4">{getCategoryBadge(event.category)}</td>
-                    <td className="py-3 px-4">{getStatusBadge(event.status)}</td>
-                    <td className="py-3 px-4 text-gray-700">
-                      {new Date(event.start_date).toLocaleDateString('id-ID')}
-                    </td>
-                    <td className="py-3 px-4">
-                      <div className="flex items-center justify-end gap-2">
-                        <Link
-                          href={`/events/${event.slug}`}
-                          target="_blank"
-                          className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                          title="View"
-                        >
-                          <Eye className="w-4 h-4" />
-                        </Link>
-
-                        {canEditEvent(event) && (
+                    <tr key={event.id} className="border-b border-gray-100 hover:bg-gray-50">
+                      <td className="py-3 px-4">
+                        <div className="font-medium text-gray-900">{event.title}</div>
+                        <div className="text-sm text-gray-500">{event.slug}</div>
+                      </td>
+                      <td className="py-3 px-4 text-gray-700">{event.organizer.name}</td>
+                      <td className="py-3 px-4">{getCategoryBadge(event.category)}</td>
+                      <td className="py-3 px-4">{getStatusBadge(event.status)}</td>
+                      <td className="py-3 px-4 text-gray-700">
+                        {new Date(event.start_date).toLocaleDateString('id-ID')}
+                      </td>
+                      <td className="py-3 px-4">
+                        <div className="flex items-center justify-end gap-2">
                           <Link
-                            href={`/admin/events/${event.id}/edit`}
+                            href={`/events/${event.slug}`}
+                            target="_blank"
                             className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                            title="Edit"
+                            title="View"
                           >
-                            <Edit className="w-4 h-4" />
+                            <Eye className="w-4 h-4" />
                           </Link>
-                        )}
 
-                        {canDeleteEvent(event) && (
-                          <button
-                            onClick={() => handleDelete(event.id, event.title)}
-                            className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                            title="Delete"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
+                          {canEditEvent(event) && (
+                            <Link
+                              href={`/admin/events/${event.id}/edit`}
+                              className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                              title="Edit"
+                            >
+                              <Edit className="w-4 h-4" />
+                            </Link>
+                          )}
+
+                          {canDeleteEvent(event) && (
+                            <button
+                              onClick={() => handleDelete(event.id, event.title)}
+                              className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                              title="Delete"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
                   ))}
                 </tbody>
               </table>

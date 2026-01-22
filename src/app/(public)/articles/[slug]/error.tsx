@@ -13,7 +13,7 @@ export default function ArticleDetailError({
     <div className="min-h-screen bg-gray-50">
       <ErrorState
         title="Failed to load article"
-        message="We couldn't load this article. It may have been moved or deleted."
+        message="We could not load this article. It may have been moved or deleted."
         error={error}
         onRetry={reset}
         showDetails={process.env.NODE_ENV === 'development'}

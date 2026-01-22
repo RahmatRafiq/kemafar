@@ -13,7 +13,7 @@ export default function EventDetailError({
     <div className="min-h-screen bg-gray-50">
       <ErrorState
         title="Failed to load event"
-        message="We couldn't load this event. It may have been moved or deleted."
+        message="We could not load this event. It may have been moved or deleted."
         error={error}
         onRetry={reset}
         showDetails={process.env.NODE_ENV === 'development'}

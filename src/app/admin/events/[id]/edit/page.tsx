@@ -113,7 +113,7 @@ export default function EditEventPage() {
         tags: Array.isArray(event.tags) ? event.tags.join(', ') : '',
         featured: event.featured || false,
       });
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error fetching event:', error);
       toast.error('Failed to load event');
     } finally {
@@ -189,9 +189,10 @@ export default function EditEventPage() {
 
       toast.success('Event updated successfully');
       router.push('/admin/events');
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error updating event:', error);
-      toast.error(error.message || 'Failed to update event');
+      const message = error instanceof Error ? error.message : 'Failed to update event';
+      toast.error(message);
     } finally {
       setLoading(false);
     }

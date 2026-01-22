@@ -82,7 +82,7 @@ export default function EditMemberPage() {
         social_media_linkedin: member.social_media?.linkedin || '',
         social_media_twitter: member.social_media?.twitter || '',
       });
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error fetching member:', error);
       toast.error('Failed to load member data');
     } finally {
@@ -96,7 +96,7 @@ export default function EditMemberPage() {
 
     try {
       // Build social_media object from flattened fields
-      const socialMedia: any = {};
+      const socialMedia: Record<string, string> = {};
       if (formData.social_media_instagram) socialMedia.instagram = formData.social_media_instagram;
       if (formData.social_media_linkedin) socialMedia.linkedin = formData.social_media_linkedin;
       if (formData.social_media_twitter) socialMedia.twitter = formData.social_media_twitter;
@@ -133,9 +133,10 @@ export default function EditMemberPage() {
 
       toast.success('Member updated successfully');
       router.push('/admin/members');
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error updating member:', error);
-      toast.error(error.message || 'Failed to update member');
+      const message = error instanceof Error ? error.message : 'Failed to update member';
+      toast.error(message);
     } finally {
       setLoading(false);
     }

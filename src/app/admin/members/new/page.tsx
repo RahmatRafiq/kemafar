@@ -69,8 +69,9 @@ export default function NewMemberPage() {
 
       toast.success('Member added successfully');
       router.push('/admin/members');
-    } catch (error: any) {
-      toast.error('Failed to add member: ' + error.message);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Unknown error';
+      toast.error('Failed to add member: ' + message);
     } finally {
       setLoading(false);
     }

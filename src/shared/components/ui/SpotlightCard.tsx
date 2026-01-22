@@ -1,7 +1,6 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
 interface SpotlightCardProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -21,7 +20,9 @@ export function SpotlightCard({
     const [opacity, setOpacity] = useState(0);
 
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (!divRef.current) return;
+        if (!divRef.current) {
+            return;
+        }
 
         const rect = divRef.current.getBoundingClientRect();
         setPosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });

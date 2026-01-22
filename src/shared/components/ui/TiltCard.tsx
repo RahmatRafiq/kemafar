@@ -21,7 +21,9 @@ export function TiltCard({
     const [rotateY, setRotateY] = useState(0);
 
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (!ref.current) return;
+        if (!ref.current) {
+            return;
+        }
 
         const rect = ref.current.getBoundingClientRect();
         const width = rect.width;

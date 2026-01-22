@@ -106,9 +106,10 @@ export default function NewEventPage() {
 
       toast.success('Event created successfully');
       router.push('/admin/events');
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error creating event:', error);
-      toast.error(error.message || 'Failed to create event');
+      const message = error instanceof Error ? error.message : 'Failed to create event';
+      toast.error(message);
     } finally {
       setLoading(false);
     }

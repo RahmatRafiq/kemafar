@@ -93,8 +93,9 @@ export default function ArticlesPage() {
 
       setArticles(data || []);
       setTotalCount(count || 0);
-    } catch (error: any) {
-      toast.error(error.message || 'Failed to load articles');
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to load articles';
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -114,11 +115,12 @@ export default function ArticlesPage() {
       if (error) throw error;
 
       toast.success('Article deleted successfully');
-    } catch (error: any) {
+    } catch (error) {
       // Rollback on error
       setArticles(previousArticles);
       setTotalCount((prev) => prev + 1);
-      toast.error(error.message || 'Failed to delete article');
+      const message = error instanceof Error ? error.message : 'Failed to delete article';
+      toast.error(message);
     }
   }
 
@@ -149,10 +151,11 @@ export default function ArticlesPage() {
       if (error) throw error;
 
       toast.success('Article published successfully');
-    } catch (error: any) {
+    } catch (error) {
       // Rollback on error
       setArticles(previousArticles);
-      toast.error(error.message || 'Failed to publish article');
+      const message = error instanceof Error ? error.message : 'Failed to publish article';
+      toast.error(message);
     }
   }
 
@@ -180,10 +183,11 @@ export default function ArticlesPage() {
       if (error) throw error;
 
       toast.success('Article unpublished successfully');
-    } catch (error: any) {
+    } catch (error) {
       // Rollback on error
       setArticles(previousArticles);
-      toast.error(error.message || 'Failed to unpublish article');
+      const message = error instanceof Error ? error.message : 'Failed to unpublish article';
+      toast.error(message);
     }
   }
 
@@ -213,9 +217,8 @@ export default function ArticlesPage() {
 
     return (
       <span
-        className={`px-2 py-1 text-xs font-medium rounded-full ${
-          styles[status as keyof typeof styles] || styles.draft
-        }`}
+        className={`px-2 py-1 text-xs font-medium rounded-full ${styles[status as keyof typeof styles] || styles.draft
+          }`}
       >
         {status.charAt(0).toUpperCase() + status.slice(1)}
       </span>
@@ -315,72 +318,72 @@ export default function ArticlesPage() {
                 </thead>
                 <tbody>
                   {articles.map((article) => (
-                  <tr key={article.id} className="border-b border-gray-100 hover:bg-gray-50">
-                    <td className="py-3 px-4">
-                      <div className="font-medium text-gray-900">{article.title}</div>
-                      <div className="text-sm text-gray-500">{article.slug}</div>
-                    </td>
-                    <td className="py-3 px-4 text-gray-700">{article.author.name}</td>
-                    <td className="py-3 px-4">{getCategoryBadge(article.category)}</td>
-                    <td className="py-3 px-4">{getStatusBadge(article.status)}</td>
-                    <td className="py-3 px-4 text-gray-700">
-                      {new Date(article.published_at).toLocaleDateString('id-ID')}
-                    </td>
-                    <td className="py-3 px-4">
-                      <div className="flex items-center justify-end gap-2">
-                        {article.status === 'published' && (
-                          <Link
-                            href={`/articles/${article.slug}`}
-                            target="_blank"
-                            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                            title="View"
-                          >
-                            <Eye className="w-4 h-4" />
-                          </Link>
-                        )}
+                    <tr key={article.id} className="border-b border-gray-100 hover:bg-gray-50">
+                      <td className="py-3 px-4">
+                        <div className="font-medium text-gray-900">{article.title}</div>
+                        <div className="text-sm text-gray-500">{article.slug}</div>
+                      </td>
+                      <td className="py-3 px-4 text-gray-700">{article.author.name}</td>
+                      <td className="py-3 px-4">{getCategoryBadge(article.category)}</td>
+                      <td className="py-3 px-4">{getStatusBadge(article.status)}</td>
+                      <td className="py-3 px-4 text-gray-700">
+                        {new Date(article.published_at).toLocaleDateString('id-ID')}
+                      </td>
+                      <td className="py-3 px-4">
+                        <div className="flex items-center justify-end gap-2">
+                          {article.status === 'published' && (
+                            <Link
+                              href={`/articles/${article.slug}`}
+                              target="_blank"
+                              className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                              title="View"
+                            >
+                              <Eye className="w-4 h-4" />
+                            </Link>
+                          )}
 
-                        {article.status !== 'published' && canPublishArticles() && (
-                          <button
-                            onClick={() => handlePublish(article.id, article.title)}
-                            className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
-                            title="Publish"
-                          >
-                            <CheckCircle className="w-4 h-4" />
-                          </button>
-                        )}
+                          {article.status !== 'published' && canPublishArticles() && (
+                            <button
+                              onClick={() => handlePublish(article.id, article.title)}
+                              className="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                              title="Publish"
+                            >
+                              <CheckCircle className="w-4 h-4" />
+                            </button>
+                          )}
 
-                        {article.status === 'published' && canPublishArticles() && (
-                          <button
-                            onClick={() => handleUnpublish(article.id, article.title)}
-                            className="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
-                            title="Unpublish"
-                          >
-                            <CheckCircle className="w-4 h-4" />
-                          </button>
-                        )}
+                          {article.status === 'published' && canPublishArticles() && (
+                            <button
+                              onClick={() => handleUnpublish(article.id, article.title)}
+                              className="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors"
+                              title="Unpublish"
+                            >
+                              <CheckCircle className="w-4 h-4" />
+                            </button>
+                          )}
 
-                        {canEditArticle(article) && (
-                          <Link
-                            href={`/admin/articles/${article.id}/edit`}
-                            className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                            title="Edit"
-                          >
-                            <Edit className="w-4 h-4" />
-                          </Link>
-                        )}
+                          {canEditArticle(article) && (
+                            <Link
+                              href={`/admin/articles/${article.id}/edit`}
+                              className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                              title="Edit"
+                            >
+                              <Edit className="w-4 h-4" />
+                            </Link>
+                          )}
 
-                        {canDeleteArticle(article) && (
-                          <button
-                            onClick={() => handleDelete(article.id, article.title)}
-                            className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                            title="Delete"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
+                          {canDeleteArticle(article) && (
+                            <button
+                              onClick={() => handleDelete(article.id, article.title)}
+                              className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                              title="Delete"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
                   ))}
                 </tbody>
               </table>

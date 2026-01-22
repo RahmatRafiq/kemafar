@@ -127,7 +127,7 @@ export default function NewLeadershipPage() {
       setLoading(true);
 
       // Build social_media object from flattened fields
-      const socialMedia: any = {};
+      const socialMedia: Record<string, string> = {};
       if (formData.social_media_instagram) socialMedia.instagram = formData.social_media_instagram;
       if (formData.social_media_linkedin) socialMedia.linkedin = formData.social_media_linkedin;
       if (formData.social_media_twitter) socialMedia.twitter = formData.social_media_twitter;

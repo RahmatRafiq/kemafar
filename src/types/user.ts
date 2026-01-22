@@ -15,4 +15,4 @@ export interface User {
   updated_at: string;
 }
 
-export interface Profile extends User {} // Alias for consistency
+export type Profile = User; // Alias for consistency

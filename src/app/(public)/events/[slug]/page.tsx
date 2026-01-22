@@ -6,7 +6,7 @@ import { RepositoryFactory } from '@/infrastructure/repositories/RepositoryFacto
 import { EVENT_CATEGORIES } from '@/lib/constants';
 import { EVENT_STATUS_COLORS, EVENT_STATUS_LABELS } from '@/lib/constants/event';
 import { MarkdownContent } from '@/shared/components/ui/MarkdownContent';
-import { Calendar, MapPin, Users, ArrowLeft, Phone, ExternalLink, Clock, User } from 'lucide-react';
+import { Calendar, MapPin, Users, ArrowLeft, ExternalLink, Clock, User } from 'lucide-react';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 

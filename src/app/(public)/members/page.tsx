@@ -14,7 +14,7 @@ export default function MembersPage({
 }) {
   const [members, setMembers] = useState<MemberListItem[]>([]);
   const [batches, setBatches] = useState<string[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [_loading, setLoading] = useState(true);
   const { batch, division } = searchParams;
 
   useEffect(() => {

@@ -96,9 +96,10 @@ export default function NewArticlePage() {
           : 'Article submitted for review'
       );
       router.push('/admin/articles');
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error creating article:', error);
-      toast.error(error.message || 'Failed to create article');
+      const message = error instanceof Error ? error.message : 'Failed to create article';
+      toast.error(message);
     } finally {
       setLoading(false);
     }

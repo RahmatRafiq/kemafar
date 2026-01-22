@@ -8,7 +8,7 @@ import { toast } from 'sonner';
 import { ArrowLeft, Save } from 'lucide-react';
 import Link from 'next/link';
 import { MarkdownEditor } from '@/shared/components/MarkdownEditor';
-import { Article, ArticleUpdateData } from '@/types/article';
+import { Article } from '@/types/article';
 
 interface ArticleFormData {
   title: string;
@@ -25,10 +25,10 @@ interface ArticleFormData {
 export default function EditArticlePage() {
   const router = useRouter();
   const params = useParams();
-  const { user, profile, hasPermission, canEditOwnContent } = useAuth();
+  const { profile, hasPermission, canEditOwnContent } = useAuth();
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
-  const [authorId, setAuthorId] = useState<string>('');
+  const [_authorId, setAuthorId] = useState<string>('');
   const [formData, setFormData] = useState<ArticleFormData>({
     title: '',
     slug: '',
@@ -89,7 +89,7 @@ export default function EditArticlePage() {
         featured: article.featured || false,
         status: article.status || 'draft',
       });
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error fetching article:', error);
       toast.error('Failed to load article');
     } finally {
@@ -156,9 +156,10 @@ export default function EditArticlePage() {
 
       toast.success('Article updated successfully');
       router.push('/admin/articles');
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error updating article:', error);
-      toast.error(error.message || 'Failed to update article');
+      const message = error instanceof Error ? error.message : 'Failed to update article';
+      toast.error(message);
     } finally {
       setLoading(false);
     }

@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { RepositoryFactory } from '@/infrastructure/repositories/RepositoryFactory';
 import { DIVISIONS } from '@/lib/constants';
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { useEffect, useState, useRef } from 'react';
 import type { LeadershipListItem } from '@/core/entities/Leadership';
 
@@ -19,7 +19,7 @@ const positionLabels: Record<string, string> = {
 export default function LeadershipPage() {
   const [coreLeadership, setCoreLeadership] = useState<LeadershipListItem[]>([]);
   const [groupedByDivision, setGroupedByDivision] = useState<Record<string, LeadershipListItem[]>>({});
-  const [loading, setLoading] = useState(true);
+  const [_loading, setLoading] = useState(true);
 
   // Parallax Setup
   const containerRef = useRef<HTMLDivElement>(null);
@@ -39,8 +39,10 @@ export default function LeadershipPage() {
         // Group by division
         const divisionLeadership = all.filter((member) => member.division);
         const grouped = divisionLeadership.reduce((acc, member) => {
-          const div = member.division!;
-          if (!acc[div]) acc[div] = [];
+          const div = member.division ?? '';
+          if (!acc[div]) {
+            acc[div] = [];
+          }
           acc[div].push(member);
           return acc;
         }, {} as Record<string, LeadershipListItem[]>);
