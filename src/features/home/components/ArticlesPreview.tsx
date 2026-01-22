@@ -6,7 +6,7 @@ import { ArrowRight, Calendar } from 'lucide-react';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 import { useEffect, useState } from 'react';
-import { JsonArticleRepository } from '@/infrastructure/repositories/JsonArticleRepository';
+import { RepositoryFactory } from '@/infrastructure/repositories/RepositoryFactory';
 import type { ArticleListItem } from '@/core/entities/Article';
 import { ARTICLE_CATEGORIES } from '@/lib/constants';
 
@@ -17,7 +17,7 @@ export function ArticlesPreview() {
   useEffect(() => {
     const fetchArticles = async () => {
       try {
-        const repo = new JsonArticleRepository();
+        const repo = RepositoryFactory.getArticleRepository();
         const data = await repo.getFeatured(3);
         setArticles(data);
       } catch (error) {

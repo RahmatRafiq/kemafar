@@ -6,7 +6,7 @@ import { ArrowRight, Calendar, MapPin } from 'lucide-react';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 import { useEffect, useState } from 'react';
-import { JsonEventRepository } from '@/infrastructure/repositories/JsonEventRepository';
+import { RepositoryFactory } from '@/infrastructure/repositories/RepositoryFactory';
 import type { EventListItem } from '@/core/entities/Event';
 
 export function EventsPreview() {
@@ -16,7 +16,7 @@ export function EventsPreview() {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const repo = new JsonEventRepository();
+        const repo = RepositoryFactory.getEventRepository();
         const data = await repo.getUpcoming(3);
         setEvents(data);
       } catch (error) {
