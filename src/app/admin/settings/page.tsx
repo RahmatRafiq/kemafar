@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { supabase } from '@/lib/supabase/client';
 import { useAuth } from '@/lib/auth/AuthContext';
 import { toast } from 'sonner';
 import { Settings, Home, Info, Save } from 'lucide-react';
@@ -75,7 +76,15 @@ export default function SettingsPage() {
   async function fetchSettings() {
     setFetching(true);
     try {
-      const response = await fetch('/api/admin/settings');
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast.error('Not authenticated');
+        return;
+      }
+
+      const response = await fetch('/api/admin/settings', {
+        headers: { 'Authorization': `Bearer ${session.access_token}` },
+      });
 
       if (!response.ok) {
         throw new Error('Failed to fetch settings');
@@ -102,9 +111,18 @@ export default function SettingsPage() {
 
     setLoading(true);
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast.error('Not authenticated');
+        return;
+      }
+
       const response = await fetch('/api/admin/settings/home', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`,
+        },
         body: JSON.stringify(homeSettings),
       });
 
@@ -127,9 +145,18 @@ export default function SettingsPage() {
 
     setLoading(true);
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast.error('Not authenticated');
+        return;
+      }
+
       const response = await fetch('/api/admin/settings/about', {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${session.access_token}`,
+        },
         body: JSON.stringify(aboutSettings),
       });
 
