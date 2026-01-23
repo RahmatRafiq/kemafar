@@ -28,7 +28,7 @@ export default function ArticlePage() {
   const { user, profile, hasPermission, canEditOwnContent } = useAuth();
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(false);
-  const [authorId, setAuthorId] = useState<string>('');
+  const [_authorId, setAuthorId] = useState<string>('');
   const [formData, setFormData] = useState<ArticleFormData>({
     title: '',
     slug: '',
