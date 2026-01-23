@@ -1,11 +1,10 @@
 'use client';
 
 import Image from 'next/image';
-import { RepositoryFactory } from '@/infrastructure/repositories/RepositoryFactory';
+import { getActiveLeadership, type LeadershipMember } from '@/lib/api/leadership';
 import { DIVISIONS } from '@/config/domain.config';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useEffect, useState, useRef } from 'react';
-import type { LeadershipListItem } from '@/core/entities/Leadership';
 
 const positionLabels: Record<string, string> = {
   'ketua': 'Ketua',
@@ -16,9 +15,12 @@ const positionLabels: Record<string, string> = {
   'member': 'Anggota',
 };
 
+// Core positions (no division)
+const corePositions = ['ketua', 'wakil-ketua', 'sekretaris', 'bendahara'];
+
 export default function LeadershipPage() {
-  const [coreLeadership, setCoreLeadership] = useState<LeadershipListItem[]>([]);
-  const [groupedByDivision, setGroupedByDivision] = useState<Record<string, LeadershipListItem[]>>({});
+  const [coreLeadership, setCoreLeadership] = useState<LeadershipMember[]>([]);
+  const [groupedByDivision, setGroupedByDivision] = useState<Record<string, LeadershipMember[]>>({});
   const [_loading, setLoading] = useState(true);
 
   // Parallax Setup
@@ -32,12 +34,13 @@ export default function LeadershipPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const leadershipRepo = RepositoryFactory.getLeadershipRepository();
-        const core = await leadershipRepo.getCore();
-        const all = await leadershipRepo.getAll();
+        const all = await getActiveLeadership();
+
+        // Split into core and division leadership
+        const core = all.filter((member) => !member.division && corePositions.includes(member.position));
+        const divisionLeadership = all.filter((member) => member.division);
 
         // Group by division
-        const divisionLeadership = all.filter((member) => member.division);
         const grouped = divisionLeadership.reduce((acc, member) => {
           const div = member.division ?? '';
           if (!acc[div]) {
@@ -45,7 +48,7 @@ export default function LeadershipPage() {
           }
           acc[div].push(member);
           return acc;
-        }, {} as Record<string, LeadershipListItem[]>);
+        }, {} as Record<string, LeadershipMember[]>);
 
         setCoreLeadership(core);
         setGroupedByDivision(grouped);

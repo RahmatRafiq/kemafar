@@ -6,7 +6,7 @@ import { ArrowRight, Calendar } from 'lucide-react';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
 import { useEffect, useState } from 'react';
-import type { ArticleListItem } from '@/core/entities/Article';
+import type { Article as ArticleListItem } from '@/lib/api/articles';
 import { ARTICLE_CATEGORIES } from '@/config/domain.config';
 
 export function ArticlesPreview() {

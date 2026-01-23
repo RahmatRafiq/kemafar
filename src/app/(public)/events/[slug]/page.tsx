@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { RepositoryFactory } from '@/infrastructure/repositories/RepositoryFactory';
+import { getEventBySlug, getEventsByCategory } from '@/lib/api/events';
 import { EVENT_CATEGORIES } from '@/config/domain.config';
 import { EVENT_STATUS_COLORS, EVENT_STATUS_LABELS } from '@/lib/constants/event';
 import { MarkdownContent } from '@/shared/components/ui/MarkdownContent';
@@ -15,8 +15,7 @@ type Props = {
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const eventRepo = RepositoryFactory.getEventRepository();
-  const event = await eventRepo.getBySlug(params.slug);
+  const event = await getEventBySlug(params.slug);
 
   if (!event) {
     return {
@@ -31,14 +30,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function EventDetailPage({ params }: Props) {
-  const eventRepo = RepositoryFactory.getEventRepository();
-  const event = await eventRepo.getBySlug(params.slug);
+  const event = await getEventBySlug(params.slug);
 
   if (!event) {
     notFound();
   }
 
-  const relatedEvents = await eventRepo.getByCategory(event.category);
+  const relatedEvents = await getEventsByCategory(event.category);
   const filteredRelated = relatedEvents.filter((e) => e.id !== event.id).slice(0, 3);
 
   return (
