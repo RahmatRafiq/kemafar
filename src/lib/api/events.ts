@@ -8,6 +8,25 @@ export type EventStatus = 'upcoming' | 'ongoing' | 'completed' | 'cancelled';
 export type EventCategory = 'seminar' | 'workshop' | 'community-service' | 'competition' | 'training' | 'other';
 
 /**
+ * Location JSONB structure from database
+ */
+interface LocationRaw {
+  name: string;
+  address?: string;
+  city?: string;
+}
+
+/**
+ * Organizer JSONB structure from database
+ */
+interface OrganizerRaw {
+  name: string;
+  email?: string;
+  phone?: string;
+  contact?: string;
+}
+
+/**
  * Event from database (raw snake_case)
  */
 interface EventRaw {
@@ -18,14 +37,14 @@ interface EventRaw {
   content: string;
   category: EventCategory;
   cover_image: string;
-  location: any; // JSONB - could be object or string
+  location: LocationRaw | string; // JSONB or legacy string
   start_date: string;
   end_date: string;
   registration_url: string | null;
   registration_deadline: string | null;
   max_participants: number | null;
   current_participants: number | null;
-  organizer: any; // JSONB - could be object or string
+  organizer: OrganizerRaw | string; // JSONB or legacy string
   creator_id: string | null;
   status: EventStatus;
   tags: string[];
@@ -77,8 +96,8 @@ function transformEvent(raw: EventRaw): Event {
   if (typeof raw.location === 'object' && raw.location !== null) {
     // Already an object from JSONB
     locationData = {
-      name: raw.location.name || '',
-      address: raw.location.address || raw.location.city || '',
+      name: raw.location.name ?? '',
+      address: raw.location.address ?? raw.location.city ?? '',
     };
   } else if (typeof raw.location === 'string') {
     // Legacy string format
@@ -97,8 +116,8 @@ function transformEvent(raw: EventRaw): Event {
   let organizerData = { name: 'HMJF', contact: '' };
   if (typeof raw.organizer === 'object' && raw.organizer !== null) {
     organizerData = {
-      name: raw.organizer.name || 'HMJF',
-      contact: raw.organizer.contact || '',
+      name: raw.organizer.name ?? 'HMJF',
+      contact: raw.organizer.contact ?? raw.organizer.phone ?? raw.organizer.email ?? '',
     };
   } else if (typeof raw.organizer === 'string') {
     // Legacy format - shouldn't happen but handle it
@@ -116,14 +135,14 @@ function transformEvent(raw: EventRaw): Event {
     location: locationData,
     startDate: raw.start_date,
     endDate: raw.end_date,
-    registrationUrl: raw.registration_url || undefined,
-    registrationDeadline: raw.registration_deadline || undefined,
-    maxParticipants: raw.max_participants || undefined,
-    currentParticipants: raw.current_participants || undefined,
+    registrationUrl: raw.registration_url ?? undefined,
+    registrationDeadline: raw.registration_deadline ?? undefined,
+    maxParticipants: raw.max_participants ?? undefined,
+    currentParticipants: raw.current_participants ?? undefined,
     organizer: organizerData,
     status: raw.status,
-    tags: raw.tags || [],
-    images: raw.images || undefined,
+    tags: raw.tags ?? [],
+    images: raw.images ?? undefined,
     featured: raw.featured,
     createdAt: raw.created_at,
     updatedAt: raw.updated_at,
