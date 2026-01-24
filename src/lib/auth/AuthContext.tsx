@@ -127,22 +127,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }): React
   const [profile, setProfile] = useState<Profile | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null); // Added error state
+  const [error, setError] = useState<Error | null>(null);
 
   // Track if we're currently fetching to prevent race conditions
   const isFetchingRef = useRef(false);
   const pendingFetchRef = useRef<string | null>(null);
   const initializedRef = useRef(false);
+  const hasSetLoadingFalseRef = useRef(false); // Prevent loading from bouncing
 
   useEffect(() => {
     let mounted = true;
 
     // Safety timeout: force loading to false after 10 seconds
-    // Safety timeout: force loading to false after 10 seconds
     const safetyTimeout = setTimeout(() => {
-      if (mounted && !initializedRef.current) {
+      if (mounted && !hasSetLoadingFalseRef.current) {
         console.warn('[AuthContext] Loading timeout - forcing loading to false');
         setLoading(false);
+        hasSetLoadingFalseRef.current = true;
         initializedRef.current = true;
       }
     }, 10000);
@@ -371,8 +372,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }): React
       // Don't throw - we want to complete initialization even if profile fetch fails
     } finally {
       isFetchingRef.current = false;
-      setLoading(false);
-      initializedRef.current = true;
+
+      // CRITICAL: Only set loading=false ONCE during initialization
+      // After that, loading state is permanent (never bounces back to true)
+      if (!hasSetLoadingFalseRef.current) {
+        setLoading(false);
+        hasSetLoadingFalseRef.current = true;
+        initializedRef.current = true;
+      }
 
       // Process pending fetch if any
       if (pendingFetchRef.current) {
