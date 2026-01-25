@@ -16,7 +16,7 @@ import {
   UserCog,
   Settings
 } from 'lucide-react';
-import { SITE_CONFIG } from '@/config';
+import { SITE_CONFIG } from '@/config/site.config';
 
 interface AuthError extends Error {
   code?: string;

@@ -1,160 +1,22 @@
 /**
  * Configuration Index
  *
- * Central configuration file for the entire application.
- * All configuration is organized into logical sections for easy navigation.
+ * This file re-exports all configuration from organized config files
+ * and contains content-specific configuration (HOME_CONTENT, ABOUT_CONTENT).
  *
- * Sections:
- * 1. Site Configuration - Basic site info, contact details, social media
- * 2. Domain Configuration - Categories and classifications
- * 3. Navigation Configuration - Routes and menu structure
- * 4. Content Configuration - Static homepage and about page content
+ * Configuration is split into:
+ * - site.config.ts - Site information, contact details
+ * - domain.config.ts - Business domain categories and classifications
+ * - navigation.config.ts - Routes and navigation structure
  */
+
+// Re-export from organized config files
+export { SITE_CONFIG } from './site.config';
+export { ARTICLE_CATEGORIES, EVENT_CATEGORIES, DIVISIONS, GALLERY_CATEGORIES } from './domain.config';
+export { ROUTES, ADMIN_ROUTES, AUTH_ROUTES, type RouteValue } from './navigation.config';
 
 // =============================================================================
-// 1. SITE CONFIGURATION
-// =============================================================================
-
-/**
- * Site Configuration
- *
- * Contains all site-specific information including:
- * - Site name, URL, and description
- * - Contact information (email, WhatsApp, address)
- * - Social media links
- *
- * Values can be overridden via environment variables for deployment flexibility.
- */
-export const SITE_CONFIG = {
-  /** Site name shown in header and metadata */
-  name: process.env.NEXT_PUBLIC_SITE_NAME || 'Your Organization',
-
-  /** Full organization name for formal contexts */
-  fullName: 'Your Organization Full Name',
-
-  /** Site URL - used for metadata and canonical URLs */
-  url: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
-
-  /** Site description for SEO and metadata */
-  description:
-    'Your Organization - A modern platform for community engagement, content management, and member collaboration',
-
-  /** WhatsApp number for contact (format: 62812xxxxxxxx) */
-  whatsappNumber: process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || '6281234567890',
-
-  /** Organization email address */
-  email: 'contact@example.com',
-
-  /** Instagram handle (with @) */
-  instagram: '@yourorganization',
-
-  /** Physical address of the organization */
-  address: 'Jl. H.M. Yasin Limpo No. 36, Romangpolong, Gowa, Sulawesi Selatan',
-} as const;
-
-// =============================================================================
-// 2. DOMAIN CONFIGURATION
-// =============================================================================
-
-/**
- * Article Categories
- * Keys are used in URLs and database, values are displayed to users.
- */
-export const ARTICLE_CATEGORIES = {
-  post: 'Post',
-  blog: 'Blog',
-  opinion: 'Opinion',
-  publication: 'Publication',
-  info: 'Info',
-} as const;
-
-/**
- * Event Categories
- * Keys are used in URLs and database, values are displayed to users.
- */
-export const EVENT_CATEGORIES = {
-  seminar: 'Seminar',
-  workshop: 'Workshop',
-  'community-service': 'Pengabdian Masyarakat',
-  competition: 'Kompetisi',
-  training: 'Pelatihan',
-  other: 'Lainnya',
-} as const;
-
-/**
- * Organization Divisions
- * Represents the structural divisions within the organization.
- */
-export const DIVISIONS = {
-  'internal-affairs': 'Dalam Negeri',
-  'external-affairs': 'Luar Negeri',
-  academic: 'Keilmuan',
-  'student-development': 'Pengembangan Mahasiswa',
-  entrepreneurship: 'Kewirausahaan',
-  'media-information': 'Media dan Informasi',
-  'sports-arts': 'Olahraga dan Seni',
-  'islamic-spirituality': 'Kerohanian Islam',
-} as const;
-
-/**
- * Gallery Categories
- * Used for organizing photos and media in the gallery.
- */
-export const GALLERY_CATEGORIES = {
-  activities: 'Aktivitas',
-  events: 'Event',
-  facilities: 'Fasilitas',
-  organization: 'Organisasi',
-} as const;
-
-// =============================================================================
-// 3. NAVIGATION CONFIGURATION
-// =============================================================================
-
-/**
- * Public Routes
- * Main navigation routes for the public-facing website.
- */
-export const ROUTES = {
-  home: '/',
-  about: '/about',
-  articles: '/articles',
-  events: '/events',
-  leadership: '/leadership',
-  members: '/members',
-  gallery: '/gallery',
-} as const;
-
-/**
- * Admin Routes
- * Routes for the admin panel and management pages.
- */
-export const ADMIN_ROUTES = {
-  dashboard: '/admin/dashboard',
-  articles: '/admin/articles',
-  events: '/admin/events',
-  members: '/admin/members',
-  leadership: '/admin/leadership',
-  users: '/admin/users',
-  settings: '/admin/settings',
-} as const;
-
-/**
- * Auth Routes
- * Routes for authentication pages.
- */
-export const AUTH_ROUTES = {
-  login: '/auth/login',
-  logout: '/auth/logout',
-} as const;
-
-/**
- * Type helper for route values
- */
-export type RouteValue<T> = T[keyof T];
-
-// =============================================================================
-// 4. CONTENT CONFIGURATION (Static Homepage & About Page)
+// CONTENT CONFIGURATION (Static Homepage & About Page)
 // =============================================================================
 
 /**
