@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { SITE_CONFIG } from '@/config';
+import { SITE_CONFIG } from '@/config/site.config';
 
 export default function SimpleLoginPage() {
   return (

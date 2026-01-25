@@ -4,7 +4,7 @@ import { useState, FormEvent, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth/AuthContext';
 import Link from 'next/link';
-import { SITE_CONFIG } from '@/config';
+import { SITE_CONFIG } from '@/config/site.config';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
