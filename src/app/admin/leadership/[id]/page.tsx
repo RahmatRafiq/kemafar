@@ -90,6 +90,19 @@ export default function LeadershipFormPage() {
     },
   });
 
+  const handleNameChange = (value: string) => {
+    const isPhotoEmptyOrAuto = !formData.photo || formData.photo.includes('ui-avatars.com');
+    const newPhoto = isPhotoEmptyOrAuto && value.trim()
+      ? `https://ui-avatars.com/api/?name=${encodeURIComponent(value)}&background=random`
+      : formData.photo;
+
+    setFormData({
+      ...formData,
+      name: value,
+      photo: newPhoto || '',
+    });
+  };
+
   if (fetching) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -116,7 +129,7 @@ export default function LeadershipFormPage() {
               label="Full Name"
               id="name"
               value={formData.name}
-              onChange={(value) => setFormData({ ...formData, name: value })}
+              onChange={handleNameChange}
               required
             />
 
@@ -124,7 +137,7 @@ export default function LeadershipFormPage() {
               label="Email"
               id="email"
               type="email"
-              value={formData.email}
+              value={formData.email || ''}
               onChange={(value) => setFormData({ ...formData, email: value })}
               required
             />
@@ -154,7 +167,7 @@ export default function LeadershipFormPage() {
             <FormInput
               label="NIM"
               id="nim"
-              value={formData.nim}
+              value={formData.nim || ''}
               onChange={(value) => setFormData({ ...formData, nim: value })}
               required
             />
@@ -162,7 +175,7 @@ export default function LeadershipFormPage() {
             <FormInput
               label="Batch"
               id="batch"
-              value={formData.batch}
+              value={formData.batch || ''}
               onChange={(value) => setFormData({ ...formData, batch: value })}
               required
               placeholder="2020"
@@ -173,7 +186,7 @@ export default function LeadershipFormPage() {
             <FormInput
               label="Phone"
               id="phone"
-              value={formData.phone}
+              value={formData.phone || ''}
               onChange={(value) => setFormData({ ...formData, phone: value })}
               placeholder="08123456789"
             />
@@ -182,7 +195,7 @@ export default function LeadershipFormPage() {
               label="Photo URL"
               id="photo"
               type="url"
-              value={formData.photo}
+              value={formData.photo || ''}
               onChange={(value) => setFormData({ ...formData, photo: value })}
               required
               placeholder="https://example.com/photo.jpg"
@@ -193,7 +206,7 @@ export default function LeadershipFormPage() {
             <FormInput
               label="Period Start"
               id="period_start"
-              value={formData.period_start}
+              value={formData.period_start || ''}
               onChange={(value) => setFormData({ ...formData, period_start: value })}
               required
               placeholder="2024"
@@ -202,7 +215,7 @@ export default function LeadershipFormPage() {
             <FormInput
               label="Period End"
               id="period_end"
-              value={formData.period_end}
+              value={formData.period_end || ''}
               onChange={(value) => setFormData({ ...formData, period_end: value })}
               required
               placeholder="2025"
@@ -213,7 +226,7 @@ export default function LeadershipFormPage() {
             label="Order"
             id="order"
             type="number"
-            value={formData.order.toString()}
+            value={(formData.order || 1).toString()}
             onChange={(value) => setFormData({ ...formData, order: parseInt(value) || 1 })}
             required
             placeholder="1"
@@ -224,7 +237,7 @@ export default function LeadershipFormPage() {
               Bio
             </label>
             <RichTextEditor
-              value={formData.bio}
+              value={formData.bio || ''}
               onChange={(value) => setFormData({ ...formData, bio: value })}
               placeholder="Short biography..."
               height="300px"
@@ -235,7 +248,7 @@ export default function LeadershipFormPage() {
             <FormInput
               label="Instagram Username"
               id="social_media_instagram"
-              value={formData.social_media_instagram}
+              value={formData.social_media_instagram || ''}
               onChange={(value) => setFormData({ ...formData, social_media_instagram: value })}
               placeholder="username (without @)"
             />
@@ -244,7 +257,7 @@ export default function LeadershipFormPage() {
               label="LinkedIn URL"
               id="social_media_linkedin"
               type="url"
-              value={formData.social_media_linkedin}
+              value={formData.social_media_linkedin || ''}
               onChange={(value) => setFormData({ ...formData, social_media_linkedin: value })}
               placeholder="https://linkedin.com/in/username"
             />
@@ -254,7 +267,7 @@ export default function LeadershipFormPage() {
             label="Twitter URL"
             id="social_media_twitter"
             type="url"
-            value={formData.social_media_twitter}
+            value={formData.social_media_twitter || ''}
             onChange={(value) => setFormData({ ...formData, social_media_twitter: value })}
             placeholder="https://twitter.com/username"
           />
