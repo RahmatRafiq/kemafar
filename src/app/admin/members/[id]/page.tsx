@@ -92,7 +92,7 @@ export default function MemberFormPage() {
   const handleNameChange = (value: string) => {
     const isPhotoEmptyOrAuto = !formData.photo || formData.photo.includes('ui-avatars.com');
     const newPhoto = isPhotoEmptyOrAuto && value.trim()
-      ? `https://ui-avatars.com/api/?name=${encodeURIComponent(value)}&background=random`
+      ? `https://ui-avatars.com/api/?name=${encodeURIComponent(value)}&background=random&format=svg`
       : formData.photo;
 
     setFormData({

@@ -107,11 +107,17 @@ export default function LeadershipPage() {
         responsivePriority: 1,
         render: (_: unknown, __: string, row: any) => (
           <div className="flex items-center gap-3">
-            <img
-              src={row.photo}
-              alt={row.name}
-              className="w-10 h-10 rounded-full object-cover"
-            />
+            {row.photo ? (
+              <img
+                src={row.photo}
+                alt={row.name}
+                className="w-10 h-10 rounded-full object-cover"
+              />
+            ) : (
+              <div className="w-10 h-10 rounded-full bg-green-100 text-green-800 flex items-center justify-center font-semibold text-sm">
+                {row.name.charAt(0)}
+              </div>
+            )}
             <div>
               <div className="font-medium text-gray-900">{row.name}</div>
               {row.email && (
