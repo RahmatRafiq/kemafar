@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { getArticleBySlug, getArticlesByCategory } from '@/lib/api/articles';
 import { ARTICLE_CATEGORIES } from '@/config/domain.config';
 import { MarkdownContent } from '@/shared/components/ui/MarkdownContent';
+import { ArticleGallery } from '@/shared/components/ui/ArticleGallery';
 import { Calendar, Tag, ArrowLeft, Eye } from 'lucide-react';
 import { format } from 'date-fns';
 import { id } from 'date-fns/locale';
@@ -117,6 +118,9 @@ export default async function ArticleDetailPage({ params }: Props) {
                 priority
               />
             </div>
+
+            {/* Article Gallery removed as requested - images will be embedded in content */}
+
 
             {/* Content */}
             <MarkdownContent content={article.content} />

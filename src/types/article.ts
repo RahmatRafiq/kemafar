@@ -12,6 +12,7 @@ export interface Article {
   content: string;
   excerpt: string | null;
   cover_image: string | null;
+  images: string[] | null;
   author_id: string;
   category: 'post' | 'blog' | 'opinion' | 'publication' | 'info' | null;
   tags: string[] | null;

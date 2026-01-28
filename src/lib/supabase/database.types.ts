@@ -92,6 +92,7 @@ export interface Database {
           author_id: string
           status: 'draft' | 'pending' | 'published' | 'archived'
           cover_image: string
+          images: string[] | null
           published_at: string
           updated_at: string | null
           tags: string[]
@@ -110,6 +111,7 @@ export interface Database {
           author_id: string
           status?: 'draft' | 'pending' | 'published' | 'archived'
           cover_image: string
+          images?: string[] | null
           published_at: string
           updated_at?: string | null
           tags?: string[]
@@ -128,6 +130,7 @@ export interface Database {
           author_id?: string
           status?: 'draft' | 'pending' | 'published' | 'archived'
           cover_image?: string
+          images?: string[] | null
           published_at?: string
           updated_at?: string | null
           tags?: string[]

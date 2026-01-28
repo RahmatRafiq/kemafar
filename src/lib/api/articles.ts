@@ -28,6 +28,7 @@ interface ArticleRaw {
   content: string;
   category: ArticleCategory;
   cover_image: string;
+  images: string[] | null;
   tags: string[];
   featured: boolean;
   status: ArticleStatus;
@@ -52,6 +53,7 @@ export interface Article {
   content: string;
   category: ArticleCategory;
   coverImage: string;
+  images: string[];
   tags: string[];
   featured: boolean;
   status: ArticleStatus;
@@ -77,6 +79,7 @@ function transformArticle(raw: ArticleRaw): Article {
     content: raw.content,
     category: raw.category,
     coverImage: raw.cover_image,
+    images: raw.images || [],
     tags: raw.tags || [],
     featured: raw.featured,
     status: raw.status,

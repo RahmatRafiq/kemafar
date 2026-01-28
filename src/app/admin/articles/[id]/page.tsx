@@ -11,6 +11,7 @@ import { FormActions } from '@/shared/components/FormActions';
 import { FormField } from '@/shared/components/FormField';
 import { CreateableSelect } from '@/shared/components/ui/CreateableSelect';
 import { FileUpload } from '@/shared/components/ui/FileUpload';
+import { MultipleFileUpload } from '@/shared/components/ui/MultipleFileUpload';
 import { StorageService } from '@/lib/storage/storage.service';
 import { generateSlug } from '@/lib/utils/slug';
 import { ArticleFormData } from '@/types/forms';
@@ -38,7 +39,7 @@ export default function ArticlePage() {
     updateField,
   } = useAdminForm<ArticleFormData>({
     tableName: 'articles',
-    selectColumns: 'id, title, slug, excerpt, content, category, cover_image, tags, featured, status, author_id',
+    selectColumns: 'id, title, slug, excerpt, content, category, cover_image, images, tags, featured, status, author_id',
     id,
     initialData: {
       title: '',
@@ -47,6 +48,7 @@ export default function ArticlePage() {
       content: '',
       category: 'post',
       cover_image: '',
+      images: [],
       tags: '',
       featured: false,
       status: 'draft',
@@ -136,15 +138,6 @@ export default function ArticlePage() {
           />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormSelect
-              label="Category"
-              id="category"
-              value={formData.category}
-              onChange={(value) => updateField('category', value)}
-              options={CATEGORIES}
-              required
-            />
-
             <FileUpload
               label="Cover Image"
               value={formData.cover_image || ''}
@@ -155,7 +148,28 @@ export default function ArticlePage() {
               })}
               accept="image/*"
             />
+
+            <FormSelect
+              label="Category"
+              id="category"
+              value={formData.category}
+              onChange={(value) => updateField('category', value)}
+              options={CATEGORIES}
+              required
+            />
           </div>
+
+          <MultipleFileUpload
+            label="Article Gallery"
+            value={formData.images || []}
+            onChange={(urls) => updateField('images', urls)}
+            onUpload={(file) => StorageService.uploadFile(file, 'articles').then(res => {
+              if (res.error) throw res.error;
+              return res.url!;
+            })}
+            accept="image/*"
+            maxFiles={10}
+          />
 
           <FormTextarea
             label="Excerpt"

@@ -69,6 +69,7 @@ export interface ArticleFormData {
   content: string;
   excerpt: string;
   cover_image: string;
+  images: string[];
   category: 'post' | 'blog' | 'opinion' | 'publication' | 'info';
   tags: string;
   featured: boolean;

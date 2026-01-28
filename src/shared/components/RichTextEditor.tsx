@@ -32,6 +32,7 @@ import {
 import { useCallback, useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { MarkdownContent } from './ui/MarkdownContent';
 
 interface RichTextEditorProps {
   value: string;
@@ -91,7 +92,7 @@ export function RichTextEditor({
         },
       }),
       Markdown.configure({
-        html: true,
+        html: false,
         transformPastedText: true,
         transformCopiedText: false,
         linkify: true,
@@ -219,204 +220,204 @@ export function RichTextEditor({
       <div className="flex flex-col">
         {/* Toolbar */}
         <div className="sticky top-0 z-30 bg-gray-50 border-b border-gray-300 px-2 py-2 flex flex-wrap gap-1">
-        {/* Text Formatting */}
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleBold().run()}
-          disabled={!editor.can().chain().focus().toggleBold().run()}
-          className={cn(
-            'p-2 rounded hover:bg-gray-200 transition-colors',
-            editor.isActive('bold') ? 'bg-gray-200' : ''
-          )}
-          title="Bold (Ctrl+B)"
-        >
-          <Bold className="w-4 h-4" />
-        </button>
+          {/* Text Formatting */}
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleBold().run()}
+            disabled={!editor.can().chain().focus().toggleBold().run()}
+            className={cn(
+              'p-2 rounded hover:bg-gray-200 transition-colors',
+              editor.isActive('bold') ? 'bg-gray-200' : ''
+            )}
+            title="Bold (Ctrl+B)"
+          >
+            <Bold className="w-4 h-4" />
+          </button>
 
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleItalic().run()}
-          disabled={!editor.can().chain().focus().toggleItalic().run()}
-          className={cn(
-            'p-2 rounded hover:bg-gray-200 transition-colors',
-            editor.isActive('italic') ? 'bg-gray-200' : ''
-          )}
-          title="Italic (Ctrl+I)"
-        >
-          <Italic className="w-4 h-4" />
-        </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleItalic().run()}
+            disabled={!editor.can().chain().focus().toggleItalic().run()}
+            className={cn(
+              'p-2 rounded hover:bg-gray-200 transition-colors',
+              editor.isActive('italic') ? 'bg-gray-200' : ''
+            )}
+            title="Italic (Ctrl+I)"
+          >
+            <Italic className="w-4 h-4" />
+          </button>
 
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleStrike().run()}
-          disabled={!editor.can().chain().focus().toggleStrike().run()}
-          className={cn(
-            'p-2 rounded hover:bg-gray-200 transition-colors',
-            editor.isActive('strike') ? 'bg-gray-200' : ''
-          )}
-          title="Strikethrough"
-        >
-          <Strikethrough className="w-4 h-4" />
-        </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleStrike().run()}
+            disabled={!editor.can().chain().focus().toggleStrike().run()}
+            className={cn(
+              'p-2 rounded hover:bg-gray-200 transition-colors',
+              editor.isActive('strike') ? 'bg-gray-200' : ''
+            )}
+            title="Strikethrough"
+          >
+            <Strikethrough className="w-4 h-4" />
+          </button>
 
-        <div className="w-px h-8 bg-gray-300 mx-1" />
+          <div className="w-px h-8 bg-gray-300 mx-1" />
 
-        {/* Headings */}
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-          className={cn(
-            'p-2 rounded hover:bg-gray-200 transition-colors',
-            editor.isActive('heading', { level: 1 }) ? 'bg-gray-200' : ''
-          )}
-          title="Heading 1"
-        >
-          <Heading1 className="w-4 h-4" />
-        </button>
+          {/* Headings */}
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+            className={cn(
+              'p-2 rounded hover:bg-gray-200 transition-colors',
+              editor.isActive('heading', { level: 1 }) ? 'bg-gray-200' : ''
+            )}
+            title="Heading 1"
+          >
+            <Heading1 className="w-4 h-4" />
+          </button>
 
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-          className={cn(
-            'p-2 rounded hover:bg-gray-200 transition-colors',
-            editor.isActive('heading', { level: 2 }) ? 'bg-gray-200' : ''
-          )}
-          title="Heading 2"
-        >
-          <Heading2 className="w-4 h-4" />
-        </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+            className={cn(
+              'p-2 rounded hover:bg-gray-200 transition-colors',
+              editor.isActive('heading', { level: 2 }) ? 'bg-gray-200' : ''
+            )}
+            title="Heading 2"
+          >
+            <Heading2 className="w-4 h-4" />
+          </button>
 
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-          className={cn(
-            'p-2 rounded hover:bg-gray-200 transition-colors',
-            editor.isActive('heading', { level: 3 }) ? 'bg-gray-200' : ''
-          )}
-          title="Heading 3"
-        >
-          <Heading3 className="w-4 h-4" />
-        </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+            className={cn(
+              'p-2 rounded hover:bg-gray-200 transition-colors',
+              editor.isActive('heading', { level: 3 }) ? 'bg-gray-200' : ''
+            )}
+            title="Heading 3"
+          >
+            <Heading3 className="w-4 h-4" />
+          </button>
 
-        <div className="w-px h-8 bg-gray-300 mx-1" />
+          <div className="w-px h-8 bg-gray-300 mx-1" />
 
-        {/* Lists */}
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={cn(
-            'p-2 rounded hover:bg-gray-200 transition-colors',
-            editor.isActive('bulletList') ? 'bg-gray-200' : ''
-          )}
-          title="Bullet List"
-        >
-          <List className="w-4 h-4" />
-        </button>
+          {/* Lists */}
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleBulletList().run()}
+            className={cn(
+              'p-2 rounded hover:bg-gray-200 transition-colors',
+              editor.isActive('bulletList') ? 'bg-gray-200' : ''
+            )}
+            title="Bullet List"
+          >
+            <List className="w-4 h-4" />
+          </button>
 
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={cn(
-            'p-2 rounded hover:bg-gray-200 transition-colors',
-            editor.isActive('orderedList') ? 'bg-gray-200' : ''
-          )}
-          title="Ordered List"
-        >
-          <ListOrdered className="w-4 h-4" />
-        </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleOrderedList().run()}
+            className={cn(
+              'p-2 rounded hover:bg-gray-200 transition-colors',
+              editor.isActive('orderedList') ? 'bg-gray-200' : ''
+            )}
+            title="Ordered List"
+          >
+            <ListOrdered className="w-4 h-4" />
+          </button>
 
-        <div className="w-px h-8 bg-gray-300 mx-1" />
+          <div className="w-px h-8 bg-gray-300 mx-1" />
 
-        {/* Blocks */}
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          className={cn(
-            'p-2 rounded hover:bg-gray-200 transition-colors',
-            editor.isActive('blockquote') ? 'bg-gray-200' : ''
-          )}
-          title="Blockquote"
-        >
-          <Quote className="w-4 h-4" />
-        </button>
+          {/* Blocks */}
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleBlockquote().run()}
+            className={cn(
+              'p-2 rounded hover:bg-gray-200 transition-colors',
+              editor.isActive('blockquote') ? 'bg-gray-200' : ''
+            )}
+            title="Blockquote"
+          >
+            <Quote className="w-4 h-4" />
+          </button>
 
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-          className={cn(
-            'p-2 rounded hover:bg-gray-200 transition-colors',
-            editor.isActive('codeBlock') ? 'bg-gray-200' : ''
-          )}
-          title="Code Block"
-        >
-          <Code className="w-4 h-4" />
-        </button>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+            className={cn(
+              'p-2 rounded hover:bg-gray-200 transition-colors',
+              editor.isActive('codeBlock') ? 'bg-gray-200' : ''
+            )}
+            title="Code Block"
+          >
+            <Code className="w-4 h-4" />
+          </button>
 
-        <div className="w-px h-8 bg-gray-300 mx-1" />
+          <div className="w-px h-8 bg-gray-300 mx-1" />
 
-        {/* Insert */}
-        <button
-          type="button"
-          onClick={setLink}
-          className={cn(
-            'p-2 rounded hover:bg-gray-200 transition-colors',
-            editor.isActive('link') ? 'bg-gray-200' : ''
-          )}
-          title="Add Link"
-        >
-          <LinkIcon className="w-4 h-4" />
-        </button>
+          {/* Insert */}
+          <button
+            type="button"
+            onClick={setLink}
+            className={cn(
+              'p-2 rounded hover:bg-gray-200 transition-colors',
+              editor.isActive('link') ? 'bg-gray-200' : ''
+            )}
+            title="Add Link"
+          >
+            <LinkIcon className="w-4 h-4" />
+          </button>
 
-        <button
-          type="button"
-          onClick={addImage}
-          className="p-2 rounded hover:bg-gray-200 transition-colors"
-          title="Add Image"
-        >
-          <ImageIcon className="w-4 h-4" />
-        </button>
+          <button
+            type="button"
+            onClick={addImage}
+            className="p-2 rounded hover:bg-gray-200 transition-colors"
+            title="Add Image"
+          >
+            <ImageIcon className="w-4 h-4" />
+          </button>
 
-        <button
-          type="button"
-          onClick={addTable}
-          className="p-2 rounded hover:bg-gray-200 transition-colors"
-          title="Insert Table"
-        >
-          <TableIcon className="w-4 h-4" />
-        </button>
+          <button
+            type="button"
+            onClick={addTable}
+            className="p-2 rounded hover:bg-gray-200 transition-colors"
+            title="Insert Table"
+          >
+            <TableIcon className="w-4 h-4" />
+          </button>
 
-        <button
-          type="button"
-          onClick={pasteMarkdown}
-          className="p-2 rounded hover:bg-gray-200 transition-colors"
-          title="Paste Markdown (from clipboard)"
-        >
-          <FileText className="w-4 h-4" />
-        </button>
+          <button
+            type="button"
+            onClick={pasteMarkdown}
+            className="p-2 rounded hover:bg-gray-200 transition-colors"
+            title="Paste Markdown (from clipboard)"
+          >
+            <FileText className="w-4 h-4" />
+          </button>
 
-        <div className="w-px h-8 bg-gray-300 mx-1" />
+          <div className="w-px h-8 bg-gray-300 mx-1" />
 
-        {/* History */}
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().undo().run()}
-          disabled={!editor.can().chain().focus().undo().run()}
-          className="p-2 rounded hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          title="Undo (Ctrl+Z)"
-        >
-          <Undo className="w-4 h-4" />
-        </button>
+          {/* History */}
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().undo().run()}
+            disabled={!editor.can().chain().focus().undo().run()}
+            className="p-2 rounded hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            title="Undo (Ctrl+Z)"
+          >
+            <Undo className="w-4 h-4" />
+          </button>
 
-        <button
-          type="button"
-          onClick={() => editor.chain().focus().redo().run()}
-          disabled={!editor.can().chain().focus().redo().run()}
-          className="p-2 rounded hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          title="Redo (Ctrl+Y)"
-        >
-          <Redo className="w-4 h-4" />
-        </button>
-      </div>
+          <button
+            type="button"
+            onClick={() => editor.chain().focus().redo().run()}
+            disabled={!editor.can().chain().focus().redo().run()}
+            className="p-2 rounded hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            title="Redo (Ctrl+Y)"
+          >
+            <Redo className="w-4 h-4" />
+          </button>
+        </div>
 
         {/* Editor Content */}
         <div style={{ height }} className="overflow-auto">
@@ -432,11 +433,9 @@ export function RichTextEditor({
           </div>
           <div
             style={{ height }}
-            className="overflow-auto p-4 prose prose-lg max-w-none"
+            className="overflow-auto p-4 bg-white"
           >
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {previewMarkdown}
-            </ReactMarkdown>
+            <MarkdownContent content={previewMarkdown} />
           </div>
         </div>
       )}
