@@ -44,21 +44,9 @@ function DivisionSection({
     offset: ["start end", "end start"]
   });
 
-  // Scroll Down: 
-  // 0.0 - 0.35: Enter from Right (250px -> 0)
-  // 0.35 - 0.65: STABLE CENTER (0 -> 0) - This gives the "Auto Center" feel
-  // 0.65 - 1.0: Exit to Left (0 -> -250px)
+  // Optimized: Only 2 transforms instead of 5 (x + opacity only, remove blur/scale for mobile performance)
   const x = useTransform(scrollYProgress, [0, 0.35, 0.65, 1], [250, 0, 0, -250]);
-
-  // Spotlight Effects:
-  // Opacity: Fade in/out
   const opacity = useTransform(scrollYProgress, [0, 0.25, 0.8, 1], [0, 1, 1, 0]);
-  // Scale: Popping effect in center
-  const scale = useTransform(scrollYProgress, [0, 0.35, 0.65, 1], [0.85, 1, 1, 0.85]);
-  // Blur: Blur edges to focus center
-  const blur = useTransform(scrollYProgress, [0, 0.35, 0.65, 1], ["blur(4px)", "blur(0px)", "blur(0px)", "blur(4px)"]);
-  // Background Highlight: Subtle glow when active
-  const bgOpacity = useTransform(scrollYProgress, [0.2, 0.4, 0.6, 0.8], [0, 0.1, 0.1, 0]);
 
   return (
     <motion.div
@@ -66,21 +54,10 @@ function DivisionSection({
       style={{
         x,
         opacity,
-        scale,
-        filter: blur,
-        willChange: 'transform, opacity, filter',
-        transform: 'translateZ(0)', // Force GPU acceleration
+        willChange: 'transform, opacity',
       }}
       className="mb-48 py-12 last:mb-0 relative"
     >
-      {/* Active State Backdrop Glow */}
-      <motion.div
-        style={{
-          opacity: bgOpacity,
-          willChange: 'opacity',
-        }}
-        className="absolute -inset-8 bg-gradient-to-r from-transparent via-primary-900/30 to-transparent rounded-3xl -z-10 blur-xl transition-all duration-500"
-      />
 
       {/* Division Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-gray-700/50 pb-6 mb-12">
@@ -100,13 +77,15 @@ function DivisionSection({
             className="flex items-center gap-6 group"
           >
             {/* Avatar */}
-            <div className="relative w-20 h-20 flex-shrink-0 overflow-hidden rounded-full bg-gray-800 border-2 border-gray-700 group-hover:border-primary-400 group-hover:shadow-[0_0_20px_rgba(var(--primary-rgb),0.5)] transition-all duration-500">
+            <div className="relative w-20 h-20 flex-shrink-0 overflow-hidden rounded-full bg-gray-800 border-2 border-gray-700 group-hover:border-primary-400 transition-colors duration-300">
               {member.photo ? (
                 <Image
                   src={member.photo}
                   alt={member.name}
                   fill
-                  className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-110"
+                  sizes="80px"
+                  loading="lazy"
+                  className="object-cover grayscale group-hover:grayscale-0 transition-all duration-300"
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
@@ -140,10 +119,10 @@ export default function LeadershipPage() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll(); // Use global scroll for sticky effect
 
-  // Parallax transforms for the Hero Title
-  const y = useTransform(scrollY, [0, 1000], [0, 400]); // Moves down slower than scroll to create parallax
-  const opacity = useTransform(scrollY, [0, 500], [1, 0.3]); // Fade partially but stay visible
-  const blur = useTransform(scrollY, [0, 400], ["blur(0px)", "blur(20px)"]); // Stronger blur effect
+  // Optimized parallax: Lighter blur effect for mobile performance
+  const y = useTransform(scrollY, [0, 1000], [0, 400]);
+  const opacity = useTransform(scrollY, [0, 500], [1, 0.3]);
+  const blur = useTransform(scrollY, [0, 400], ["blur(0px)", "blur(10px)"]); // Reduced from 20px to 10px
 
   useEffect(() => {
     const fetchData = async () => {
@@ -202,9 +181,9 @@ export default function LeadershipPage() {
           </p>
         </motion.div>
 
-        {/* Ambient Background Glows */}
-        <div className="absolute top-1/4 left-1/4 w-[30rem] h-[30rem] bg-primary-900/20 rounded-full blur-[100px] -z-10 animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-[25rem] h-[25rem] bg-secondary-900/20 rounded-full blur-[100px] -z-10 animate-pulse" style={{ animationDelay: '2s' }} />
+        {/* Ambient Background Glows - Optimized for mobile */}
+        <div className="hidden md:block absolute top-1/4 left-1/4 w-[30rem] h-[30rem] bg-primary-900/20 rounded-full blur-[80px] -z-10" />
+        <div className="hidden md:block absolute bottom-1/4 right-1/4 w-[25rem] h-[25rem] bg-secondary-900/20 rounded-full blur-[80px] -z-10" />
       </div>
 
       {/* 
@@ -224,16 +203,13 @@ export default function LeadershipPage() {
               {coreLeadership.map((member, index) => (
                 <motion.div
                   key={member.id}
-                  initial={{ opacity: 0, y: 50 }}
+                  initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px", amount: 0.3 }}
                   transition={{
-                    delay: index * 0.08,
-                    duration: 0.6,
+                    delay: index * 0.05,
+                    duration: 0.4,
                     ease: "easeOut"
-                  }}
-                  style={{
-                    willChange: 'transform, opacity',
                   }}
                   className="group relative"
                 >
@@ -245,9 +221,12 @@ export default function LeadershipPage() {
                           src={member.photo}
                           alt={member.name}
                           fill
-                          className="object-cover grayscale group-hover:grayscale-0 transition-all duration-700 ease-out"
+                          sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                          priority={index < 4}
+                          loading={index < 4 ? "eager" : "lazy"}
+                          className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500 ease-out"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                       </>
                     ) : (
                       <div className="flex flex-col items-center justify-center text-gray-700 group-hover:text-primary-500 transition-colors">
