@@ -90,8 +90,8 @@ export function FloatingDock() {
                                     )}>
                                         {isCustomLogo ? (
                                             <div className={cn(
-                                                "relative w-6 h-6 md:w-7 md:h-7 transition-all duration-200",
-                                                !isActive && "opacity-70 drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]"
+                                                "relative w-6 h-6 md:w-7 md:h-7 transition-all duration-200 rounded-lg flex items-center justify-center",
+                                                !isActive && "bg-white/90 shadow-md p-0.5 backdrop-blur-sm"
                                             )}>
                                                 <Image
                                                     src={isActive ? "/icons/logo-active.webp" : "/icons/logo-inactive.webp"}
@@ -99,7 +99,7 @@ export function FloatingDock() {
                                                     fill
                                                     className={cn(
                                                         "object-contain transition-all duration-200",
-                                                        !isActive && "brightness-90 contrast-125"
+                                                        !isActive && "p-0.5"
                                                     )}
                                                     sizes="32px"
                                                 />
