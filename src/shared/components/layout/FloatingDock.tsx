@@ -61,7 +61,7 @@ export function FloatingDock() {
                                     {isActive && (
                                         <motion.div
                                             layoutId="active-pill"
-                                            className="absolute inset-0 bg-primary-600 rounded-full shadow-[0_0_20px_rgba(22,163,74,0.5)]"
+                                            className="absolute inset-0 bg-primary-600 rounded-full shadow-[0_0_20px_rgba(83,113,146,0.5)]"
                                             transition={{ type: "spring", stiffness: 300, damping: 30 }}
                                         />
                                     )}
