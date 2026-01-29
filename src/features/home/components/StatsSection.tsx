@@ -96,12 +96,15 @@ function Counter({ value, suffix }: { value: number; suffix: string }) {
 
 export function StatsSection() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollY } = useScroll();
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
 
-  // Parallax transforms for the title (mobile-focused)
-  const y = useTransform(scrollY, [0, 800], [0, 200]);
-  const opacity = useTransform(scrollY, [0, 400], [1, 0.3]);
-  const blur = useTransform(scrollY, [0, 300], ["blur(0px)", "blur(15px)"]);
+  // Parallax transforms based on section scroll progress
+  const y = useTransform(scrollYProgress, [0, 0.5, 1], [100, 0, -100]);
+  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0]);
+  const blur = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], ["blur(10px)", "blur(0px)", "blur(0px)", "blur(10px)"]);
 
   return (
     <section ref={containerRef} className="relative py-40 overflow-hidden bg-primary-600">
@@ -110,7 +113,7 @@ export function StatsSection() {
       <div className="absolute top-0 left-0 w-1/2 h-full bg-gradient-to-r from-accent-100/5 to-transparent" />
 
       {/* Fixed background title with parallax blur (mobile) */}
-      <div className="md:hidden fixed inset-0 z-0 flex items-start pt-32 justify-center pointer-events-none">
+      <div className="md:hidden absolute inset-0 z-0 flex items-center justify-center pointer-events-none overflow-hidden">
         <motion.div
           style={{
             y,
@@ -121,8 +124,8 @@ export function StatsSection() {
           }}
           className="text-center px-4"
         >
-          <h2 className="text-6xl font-bold text-white/20 leading-tight">
-            Our Community
+          <h2 className="text-7xl font-black text-white/10 leading-tight uppercase tracking-tighter">
+            Our<br />Community
           </h2>
         </motion.div>
       </div>
