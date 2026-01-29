@@ -1,11 +1,11 @@
 /**
  * StatsSection Component
- * Animated statistics and achievements
+ * Animated statistics with parallax blur effect on mobile
  */
 
 'use client';
 
-import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
+import { motion, useMotionValue, useTransform, animate, useScroll } from 'framer-motion';
 import { Users, Leaf, Award, TrendingUp } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
@@ -95,14 +95,40 @@ function Counter({ value, suffix }: { value: number; suffix: string }) {
 }
 
 export function StatsSection() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollY } = useScroll();
+
+  // Parallax transforms for the title (mobile-focused)
+  const y = useTransform(scrollY, [0, 800], [0, 200]);
+  const opacity = useTransform(scrollY, [0, 400], [1, 0.3]);
+  const blur = useTransform(scrollY, [0, 300], ["blur(0px)", "blur(15px)"]);
+
   return (
-    <section className="relative py-40 overflow-hidden bg-primary-600">
+    <section ref={containerRef} className="relative py-40 overflow-hidden bg-primary-600">
       {/* Gradient overlays */}
       <div className="absolute inset-0 bg-gradient-to-br from-primary-900/50 via-primary-700 to-primary-800" />
       <div className="absolute top-0 left-0 w-1/2 h-full bg-gradient-to-r from-accent-100/5 to-transparent" />
 
+      {/* Fixed background title with parallax blur (mobile) */}
+      <div className="md:hidden fixed inset-0 z-0 flex items-start pt-32 justify-center pointer-events-none">
+        <motion.div
+          style={{
+            y,
+            opacity,
+            filter: blur,
+            willChange: 'transform, opacity, filter',
+            transform: 'translateZ(0)',
+          }}
+          className="text-center px-4"
+        >
+          <h2 className="text-6xl font-bold text-white/20 leading-tight">
+            Our Community
+          </h2>
+        </motion.div>
+      </div>
+
       <div className="container-custom relative z-10">
-        {/* Simple centered header */}
+        {/* Desktop: Normal header, Mobile: Scrollable content */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
