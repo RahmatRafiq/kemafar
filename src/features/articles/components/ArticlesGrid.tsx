@@ -30,12 +30,12 @@ export function ArticlesGrid({ articles }: ArticlesGridProps) {
         return (
           <motion.article
             key={article.id}
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px", amount: 0.3 }}
+            viewport={{ once: true, margin: "-100px", amount: 0.1 }}
             transition={{
-              duration: 0.4,
-              ease: "easeOut",
+              duration: 0.3,
+              ease: [0.25, 0.1, 0.25, 1],
             }}
             className={`group relative ${isFeatured
               ? 'md:col-span-8 md:row-span-2'
@@ -48,13 +48,14 @@ export function ArticlesGrid({ articles }: ArticlesGridProps) {
               {/* Image with overlay - no card container */}
               <div className={`relative overflow-hidden rounded-3xl ${isFeatured ? 'aspect-[4/5]' : 'aspect-[16/10]'
                 }`}>
-                <div className="w-full h-full transition-transform duration-500 group-hover:scale-110">
+                <div className="w-full h-full transition-transform duration-300 group-hover:scale-105">
                   <Image
                     src={article.coverImage}
                     alt={article.title}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover"
+                    loading="lazy"
                   />
                 </div>
 
@@ -63,7 +64,7 @@ export function ArticlesGrid({ articles }: ArticlesGridProps) {
 
                 {/* Category badge - minimal */}
                 <div className="absolute top-6 left-6">
-                  <span className="px-4 py-2 bg-white/90 backdrop-blur-sm text-gray-900 text-sm font-bold rounded-full shadow-lg transition-transform duration-300 hover:scale-110 inline-block">
+                  <span className="px-4 py-2 bg-white text-gray-900 text-sm font-bold rounded-full shadow-lg inline-block">
                     {ARTICLE_CATEGORIES[article.category]}
                   </span>
                 </div>
@@ -115,7 +116,7 @@ export function ArticlesGrid({ articles }: ArticlesGridProps) {
                       {article.tags.slice(0, 3).map((tag) => (
                         <span
                           key={tag}
-                          className="px-3 py-1 bg-white/20 backdrop-blur-sm text-white text-xs font-medium rounded-full transition-transform duration-300 hover:scale-110"
+                          className="px-3 py-1 bg-white/20 text-white text-xs font-medium rounded-full"
                         >
                           {tag}
                         </span>
