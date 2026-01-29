@@ -14,8 +14,8 @@ interface ErrorStateProps {
 }
 
 export function ErrorState({
-  title = 'Something went wrong',
-  message = 'An error occurred while loading this content.',
+  title = 'Terjadi Kesalahan',
+  message = 'Terjadi kesalahan saat memuat konten ini.',
   error,
   onRetry,
   showDetails = false,
@@ -38,7 +38,7 @@ export function ErrorState({
         {showDetails && error && (
           <details className="text-left mb-6 p-4 bg-gray-50 rounded-lg">
             <summary className="cursor-pointer text-sm font-medium text-gray-700 mb-2">
-              Error Details
+              Detail Error
             </summary>
             <pre className="text-xs text-gray-600 overflow-auto">
               {error.stack || error.message}
@@ -52,7 +52,7 @@ export function ErrorState({
             className="inline-flex items-center gap-2 px-6 py-3 bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg transition-colors"
           >
             <RefreshCw className="w-4 h-4" />
-            Try Again
+            Coba Lagi
           </button>
         )}
       </div>

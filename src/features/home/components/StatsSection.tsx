@@ -130,7 +130,7 @@ export function StatsSection() {
           className="text-center px-4"
         >
           <h2 className="text-8xl font-black text-white/30 leading-tight uppercase tracking-tighter">
-            Our<br />Community
+            Komunitas<br />Kami
           </h2>
         </motion.div>
       </div>
@@ -144,7 +144,7 @@ export function StatsSection() {
           className="text-center mb-24"
         >
           <h2 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
-            Our Community in <span className="text-accent-200">Numbers</span>
+            Komunitas Kami dalam <span className="text-accent-200">Angka</span>
           </h2>
         </motion.div>
 

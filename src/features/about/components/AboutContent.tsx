@@ -32,7 +32,7 @@ export function AboutContent({ data }: AboutContentProps) {
                         Tentang Kami
                     </h1>
                     <p className="text-xl md:text-2xl text-gray-600 leading-relaxed font-light">
-                        Learn more about our organization and our journey in building a strong, engaged community.
+                        Pelajari lebih lanjut tentang organisasi kami dan perjalanan kami dalam membangun komunitas yang kuat dan terlibat.
                     </p>
                 </motion.div>
             </Section>

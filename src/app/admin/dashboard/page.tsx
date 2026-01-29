@@ -50,19 +50,19 @@ export default function DashboardPage() {
   }
 
   const statCards = [
-    { name: 'Total Members', value: stats.members, icon: Users, color: 'bg-blue-500' },
-    { name: 'Articles', value: stats.articles, icon: FileText, color: 'bg-emerald-500' },
-    { name: 'Events', value: stats.events, icon: Calendar, color: 'bg-purple-500' },
-    { name: 'Leadership', value: stats.leadership, icon: Award, color: 'bg-orange-500' },
+    { name: 'Total Anggota', value: stats.members, icon: Users, color: 'bg-blue-500' },
+    { name: 'Artikel', value: stats.articles, icon: FileText, color: 'bg-emerald-500' },
+    { name: 'Event', value: stats.events, icon: Calendar, color: 'bg-purple-500' },
+    { name: 'Kepengurusan', value: stats.leadership, icon: Award, color: 'bg-orange-500' },
   ];
 
   return (
     <div>
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Dasbor</h1>
         <p className="mt-2 text-gray-600">
-          Welcome back, {profile?.full_name || profile?.email}!
+          Selamat datang kembali, {profile?.full_name || profile?.email}!
         </p>
       </div>
 
@@ -96,7 +96,7 @@ export default function DashboardPage() {
 
       {/* Quick Actions */}
       <div className="mt-8 bg-white rounded-xl shadow-sm p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">Aksi Cepat</h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {profile?.role !== 'kontributor' && (
             <Link
@@ -104,7 +104,7 @@ export default function DashboardPage() {
               className="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
             >
               <Users className="w-5 h-5 mr-2" />
-              Add New Member
+              Tambah Anggota Baru
             </Link>
           )}
           <Link
@@ -112,14 +112,14 @@ export default function DashboardPage() {
             className="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
           >
             <FileText className="w-5 h-5 mr-2" />
-            Create Article
+            Buat Artikel
           </Link>
           <Link
             href="/admin/events/new"
             className="flex items-center justify-center px-4 py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
           >
             <Calendar className="w-5 h-5 mr-2" />
-            Create Event
+            Buat Event
           </Link>
         </div>
       </div>

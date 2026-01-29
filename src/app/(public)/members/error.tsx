@@ -12,8 +12,8 @@ export default function MembersError({
   return (
     <div className="min-h-screen bg-white">
       <ErrorState
-        title="Failed to load members"
-        message="We couldn't load the member list. Please try again."
+        title="Gagal Memuat Anggota"
+        message="Kami tidak dapat memuat daftar anggota. Silakan coba lagi."
         error={error}
         onRetry={reset}
         showDetails={process.env.NODE_ENV === 'development'}

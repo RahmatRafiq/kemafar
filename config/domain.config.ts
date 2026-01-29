@@ -10,10 +10,10 @@
  * Keys are used in URLs and database, values are displayed to users.
  */
 export const ARTICLE_CATEGORIES = {
-  post: 'Post',
+  post: 'Pos',
   blog: 'Blog',
-  opinion: 'Opinion',
-  publication: 'Publication',
+  opinion: 'Opini',
+  publication: 'Publikasi',
   info: 'Info',
 } as const;
 

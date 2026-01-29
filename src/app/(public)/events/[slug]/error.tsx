@@ -12,8 +12,8 @@ export default function EventDetailError({
   return (
     <div className="min-h-screen bg-gray-50">
       <ErrorState
-        title="Failed to load event"
-        message="We could not load this event. It may have been moved or deleted."
+        title="Gagal Memuat Event"
+        message="Kami tidak dapat memuat event ini. Mungkin sudah dipindahkan atau dihapus."
         error={error}
         onRetry={reset}
         showDetails={process.env.NODE_ENV === 'development'}

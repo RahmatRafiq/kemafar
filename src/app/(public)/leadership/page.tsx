@@ -44,8 +44,8 @@ function DivisionSection({
     offset: ["start end", "end start"]
   });
 
-  // Optimized: Only 2 transforms instead of 5 (x + opacity only, remove blur/scale for mobile performance)
-  const x = useTransform(scrollYProgress, [0, 0.35, 0.65, 1], [250, 0, 0, -250]);
+  // Optimized: Only opacity on mobile, x transform on desktop only
+  const x = useTransform(scrollYProgress, [0, 0.35, 0.65, 1], [0, 0, 0, 0]); // Disabled for mobile
   const opacity = useTransform(scrollYProgress, [0, 0.25, 0.8, 1], [0, 1, 1, 0]);
 
   return (
@@ -61,10 +61,10 @@ function DivisionSection({
 
       {/* Division Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-gray-700/50 pb-6 mb-12">
-        <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-white shadow-black drop-shadow-2xl">
+        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tighter text-white shadow-black drop-shadow-2xl break-words">
           {formatDivision(division)}
         </h2>
-        <span className="text-2xl font-mono text-primary-400 mt-4 md:mt-0 font-bold">
+        <span className="text-xl sm:text-2xl font-mono text-primary-400 mt-4 md:mt-0 font-bold">
           {String(members.length).padStart(2, '0')}
         </span>
       </div>
@@ -95,11 +95,11 @@ function DivisionSection({
             </div>
 
             {/* Info */}
-            <div>
-              <h4 className="text-2xl font-bold text-gray-100 group-hover:text-white transition-colors tracking-tight">
+            <div className="flex-1 min-w-0">
+              <h4 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-100 group-hover:text-white transition-colors tracking-tight break-words">
                 {member.name}
               </h4>
-              <p className="text-sm text-primary-300 font-mono mt-1 uppercase tracking-wider group-hover:text-primary-200 transition-colors font-semibold">
+              <p className="text-xs sm:text-sm text-primary-300 font-mono mt-1 uppercase tracking-wider group-hover:text-primary-200 transition-colors font-semibold">
                 {formatPosition(member.position)}
               </p>
             </div>
@@ -162,7 +162,7 @@ export default function LeadershipPage() {
         FIXED BACKGROUND LAYER 
         Contains the Title "LEADERSHIP" which stays and gets blurred/covered
       */}
-      <div className="fixed inset-0 z-0 flex items-start pt-32 justify-center pointer-events-none">
+      <div className="fixed inset-0 z-0 flex items-start pt-32 justify-center pointer-events-none px-4">
         <motion.div
           style={{
             y,
@@ -171,13 +171,13 @@ export default function LeadershipPage() {
             willChange: 'transform, opacity, filter',
             transform: 'translateZ(0)', // Force GPU acceleration
           }}
-          className="text-center"
+          className="text-center w-full max-w-4xl"
         >
-          <h1 className="text-6xl sm:text-8xl md:text-9xl font-black uppercase tracking-tighter text-white mb-4">
-            Leadership
+          <h1 className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter text-white mb-4 break-words">
+            Kepengurusan
           </h1>
-          <p className="text-xl md:text-2xl text-gray-400 font-light tracking-wide max-w-2xl mx-auto">
-            The visionaries behind the movement.
+          <p className="text-lg sm:text-xl md:text-2xl text-gray-400 font-light tracking-wide max-w-2xl mx-auto px-4">
+            Visi di balik gerakan.
           </p>
         </motion.div>
 
@@ -231,7 +231,7 @@ export default function LeadershipPage() {
                     ) : (
                       <div className="flex flex-col items-center justify-center text-gray-700 group-hover:text-primary-500 transition-colors">
                         <User className="w-20 h-20 mb-4" />
-                        <span className="text-xs uppercase tracking-widest">No Photo</span>
+                        <span className="text-xs uppercase tracking-widest">Tanpa Foto</span>
                       </div>
                     )}
                   </div>
@@ -249,7 +249,7 @@ export default function LeadershipPage() {
           </div>
 
           {/* Division Leadership Section */}
-          <div className="container-custom mt-32 overflow-hidden">
+          <div className="container-custom mt-32">
             {Object.entries(groupedByDivision).map(([division, members]) => (
               <DivisionSection key={division} division={division} members={members} />
             ))}

@@ -89,7 +89,7 @@ export function Pagination({
                 aria-disabled={currentPage === 1}
             >
                 <ChevronLeft className="w-4 h-4" />
-                Prev
+                Sebelumnya
             </Link>
 
             {/* Page Numbers */}
@@ -128,7 +128,7 @@ export function Pagination({
                 )}
                 aria-disabled={currentPage === totalPages}
             >
-                Next
+                Berikutnya
                 <ChevronRight className="w-4 h-4" />
             </Link>
         </nav>

@@ -12,8 +12,8 @@ export default function LeadershipError({
   return (
     <div className="min-h-screen bg-white">
       <ErrorState
-        title="Failed to load leadership"
-        message="We couldn't load the leadership information. Please try again."
+        title="Gagal Memuat Kepengurusan"
+        message="Kami tidak dapat memuat informasi kepengurusan. Silakan coba lagi."
         error={error}
         onRetry={reset}
         showDetails={process.env.NODE_ENV === 'development'}

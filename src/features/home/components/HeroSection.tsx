@@ -128,7 +128,7 @@ export function HeroSection({ data }: HeroSectionProps) {
               <div className="absolute right-0 top-0 w-4/5 h-4/5 rounded-[4rem] rounded-tr-[10rem] overflow-hidden shadow-2xl shadow-primary-900/10" style={{ transform: 'rotate(3deg)' }}>
                 <Image
                   src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=2070"
-                  alt="Pharmacy Student"
+                  alt="Mahasiswa Farmasi"
                   fill
                   className="object-cover"
                   priority
@@ -144,7 +144,7 @@ export function HeroSection({ data }: HeroSectionProps) {
               <div className="absolute left-0 bottom-20 w-3/5 h-2/5 rounded-[3rem] rounded-bl-[6rem] overflow-hidden shadow-xl shadow-secondary-900/10 border-4 border-white" style={{ transform: 'rotate(-6deg)' }}>
                 <Image
                   src="https://images.unsplash.com/photo-1631549916768-4119b2e5f926?auto=format&fit=crop&q=80&w=2079"
-                  alt="Lab Work"
+                  alt="Kerja Laboratorium"
                   fill
                   className="object-cover"
                   sizes="(max-width: 768px) 100vw, 30vw"

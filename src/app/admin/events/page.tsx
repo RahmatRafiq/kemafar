@@ -222,11 +222,11 @@ export default function EventsPage() {
                 value={filters.status || 'all'}
                 onChange={(val) => setFilter('status', val)}
                 options={[
-                  { value: 'all', label: 'All Status' },
-                  { value: 'upcoming', label: 'Upcoming' },
-                  { value: 'ongoing', label: 'Ongoing' },
-                  { value: 'completed', label: 'Completed' },
-                  { value: 'cancelled', label: 'Cancelled' },
+                  { value: 'all', label: 'Semua Status' },
+                  { value: 'upcoming', label: 'Akan Datang' },
+                  { value: 'ongoing', label: 'Sedang Berlangsung' },
+                  { value: 'completed', label: 'Selesai' },
+                  { value: 'cancelled', label: 'Dibatalkan' },
                 ]}
               />
             </div>

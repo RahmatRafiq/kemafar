@@ -62,7 +62,7 @@ export function EventsPreview() {
             <span className="text-primary-600">Mendatang</span>
           </h2>
           <div className="flex items-center justify-between">
-            <p className="text-xl text-gray-600">Don't miss our exciting upcoming events</p>
+            <p className="text-xl text-gray-600">Jangan lewatkan event menarik kami</p>
             <Link
               href="/events"
               className="hidden md:inline-flex items-center gap-2 text-gray-900 font-semibold hover:gap-3 transition-all"
@@ -101,7 +101,7 @@ export function EventsPreview() {
                     {event.featured && (
                       <div className="absolute top-6 right-6">
                         <span className="px-4 py-2 bg-secondary-500 text-white text-sm font-bold rounded-full shadow-lg">
-                          Featured
+                          Unggulan
                         </span>
                       </div>
                     )}

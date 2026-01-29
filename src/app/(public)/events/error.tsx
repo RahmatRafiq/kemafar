@@ -12,8 +12,8 @@ export default function EventsError({
   return (
     <div className="min-h-screen bg-white">
       <ErrorState
-        title="Failed to load events"
-        message="We couldn't load the events. Please try again."
+        title="Gagal Memuat Event"
+        message="Kami tidak dapat memuat event. Silakan coba lagi."
         error={error}
         onRetry={reset}
         showDetails={process.env.NODE_ENV === 'development'}

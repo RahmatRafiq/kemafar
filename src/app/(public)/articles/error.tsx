@@ -12,8 +12,8 @@ export default function ArticlesError({
   return (
     <div className="min-h-screen bg-white">
       <ErrorState
-        title="Failed to load articles"
-        message="We couldn't load the articles. Please try again."
+        title="Gagal Memuat Artikel"
+        message="Kami tidak dapat memuat artikel. Silakan coba lagi."
         error={error}
         onRetry={reset}
         showDetails={process.env.NODE_ENV === 'development'}

@@ -18,28 +18,28 @@ interface EmptyStateProps {
 const VARIANTS = {
   articles: {
     icon: FileText,
-    title: 'No articles yet',
-    message: 'Check back later for new articles and updates.',
+    title: 'Belum Ada Artikel',
+    message: 'Kembali lagi nanti untuk artikel dan update terbaru.',
   },
   events: {
     icon: Calendar,
-    title: 'No events scheduled',
-    message: 'There are no upcoming events at the moment.',
+    title: 'Tidak Ada Event Terjadwal',
+    message: 'Tidak ada event mendatang saat ini.',
   },
   members: {
     icon: Users,
-    title: 'No members found',
-    message: 'No members match your current filters.',
+    title: 'Tidak Ada Anggota Ditemukan',
+    message: 'Tidak ada anggota yang sesuai dengan filter Anda.',
   },
   leadership: {
     icon: User,
-    title: 'No leadership data',
-    message: 'Leadership information will be available soon.',
+    title: 'Belum Ada Data Kepengurusan',
+    message: 'Informasi kepengurusan akan segera tersedia.',
   },
   default: {
     icon: FileText,
-    title: 'No data available',
-    message: 'There is no content to display at this time.',
+    title: 'Tidak Ada Data',
+    message: 'Tidak ada konten untuk ditampilkan saat ini.',
   },
 };
 

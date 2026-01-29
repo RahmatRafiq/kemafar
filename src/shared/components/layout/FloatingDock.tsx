@@ -14,12 +14,12 @@ import { motion } from 'framer-motion';
 import { Home, Info, Users, Mic, Calendar, UserCircle } from 'lucide-react';
 
 const NAV_ITEMS = [
-    { label: 'Home', href: ROUTES.home, icon: Home },
-    { label: 'About', href: ROUTES.about, icon: Info },
-    { label: 'Events', href: ROUTES.events, icon: Calendar },
-    { label: 'Articles', href: ROUTES.articles, icon: Mic },
-    { label: 'Leadership', href: ROUTES.leadership, icon: Users },
-    { label: 'Members', href: ROUTES.members, icon: UserCircle },
+    { label: 'Beranda', href: ROUTES.home, icon: Home },
+    { label: 'Tentang', href: ROUTES.about, icon: Info },
+    { label: 'Event', href: ROUTES.events, icon: Calendar },
+    { label: 'Artikel', href: ROUTES.articles, icon: Mic },
+    { label: 'Kepengurusan', href: ROUTES.leadership, icon: Users },
+    { label: 'Anggota', href: ROUTES.members, icon: UserCircle },
 ];
 
 export function FloatingDock() {

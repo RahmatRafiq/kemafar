@@ -12,8 +12,8 @@ const ArticleCategorySchema = z.enum(['post', 'blog', 'opinion', 'publication', 
 const ITEMS_PER_PAGE = 12;
 
 export const metadata: Metadata = {
-  title: 'Articles - Your Organization',
-  description: 'Collection of articles, blog posts, opinions, publications, and latest information from Your Organization',
+  title: 'Artikel',
+  description: 'Koleksi artikel, blog, opini, publikasi, dan informasi terbaru',
 };
 
 export default async function ArticlesPage({
@@ -46,7 +46,7 @@ export default async function ArticlesPage({
             Artikel
           </h1>
           <p className="text-2xl text-gray-300 max-w-3xl leading-relaxed">
-            Collection of articles, blog posts, opinions, publications, and latest information
+            Koleksi artikel, blog, opini, publikasi, dan informasi terbaru
           </p>
         </div>
       </section>
