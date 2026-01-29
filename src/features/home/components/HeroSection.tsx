@@ -120,8 +120,8 @@ export function HeroSection({ data }: HeroSectionProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0 }}
-            className="lg:col-span-5 relative h-[600px] hidden lg:block"
-            style={{ minHeight: '600px' }}
+            className="lg:col-span-5 relative h-[400px] lg:h-[600px]"
+            style={{ minHeight: '400px' }}
           >
             {/* Main Hero Image - Organic Shape */}
             <div className="relative z-10 w-full h-full">
