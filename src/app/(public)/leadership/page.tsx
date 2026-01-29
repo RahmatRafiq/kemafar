@@ -8,7 +8,7 @@ import { useEffect, useState, useRef } from 'react';
 
 /**
  * Format position string for display
- * Examples: 'ketua' → 'Ketua', 'wakil-ketua' → 'Wakil Ketua', 'coordinator' → 'Koordinator'
+ * Examples: 'ketua' → 'Ketua', 'wakil-ketua' → 'Wakil Ketua'
  */
 function formatPosition(position: string): string {
   return position
@@ -19,7 +19,7 @@ function formatPosition(position: string): string {
 
 /**
  * Format division string for display
- * Examples: 'internal-affairs' → 'Internal Affairs', 'media-information' → 'Media Information'
+ * Examples: 'internal-affairs' → 'Internal Affairs'
  */
 function formatDivision(division: string): string {
   return division
@@ -28,8 +28,39 @@ function formatDivision(division: string): string {
     .join(' ');
 }
 
-// Core positions determined by absence of division (already dynamic)
+// Core positions
 const corePositions = ['ketua', 'wakil-ketua', 'sekretaris', 'bendahara'];
+
+// Skeleton Loader Components
+function CoreMemberSkeleton() {
+  return (
+    <div className="group relative animate-pulse">
+      {/* Poster Skeleton */}
+      <div className="relative aspect-[3/4] overflow-hidden mb-6 bg-gray-800 rounded" />
+
+      {/* Text Skeleton */}
+      <div className="border-t border-gray-800 pt-4">
+        <div className="h-6 bg-gray-800 rounded w-3/4 mb-2" />
+        <div className="h-4 bg-gray-800 rounded w-1/2" />
+      </div>
+    </div>
+  );
+}
+
+function DivisionMemberSkeleton() {
+  return (
+    <div className="flex items-center gap-6 animate-pulse">
+      {/* Avatar Skeleton */}
+      <div className="w-20 h-20 rounded-full bg-gray-800 flex-shrink-0" />
+
+      {/* Info Skeleton */}
+      <div className="flex-1">
+        <div className="h-6 bg-gray-800 rounded w-3/4 mb-2" />
+        <div className="h-4 bg-gray-800 rounded w-1/2" />
+      </div>
+    </div>
+  );
+}
 
 function DivisionSection({
   division,
@@ -44,9 +75,11 @@ function DivisionSection({
     offset: ["start end", "end start"]
   });
 
-  // Optimized: Only opacity on mobile, x transform on desktop only
-  const x = useTransform(scrollYProgress, [0, 0.35, 0.65, 1], [0, 0, 0, 0]); // Disabled for mobile
+  // Parallax transforms with mobile optimization
+  const x = useTransform(scrollYProgress, [0, 0.35, 0.65, 1], [250, 0, 0, -250]);
   const opacity = useTransform(scrollYProgress, [0, 0.25, 0.8, 1], [0, 1, 1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.35, 0.65, 1], [0.95, 1, 1, 0.95]);
+  const blur = useTransform(scrollYProgress, [0, 0.35, 0.65, 1], ["blur(3px)", "blur(0px)", "blur(0px)", "blur(3px)"]);
 
   return (
     <motion.div
@@ -54,17 +87,18 @@ function DivisionSection({
       style={{
         x,
         opacity,
-        willChange: 'transform, opacity',
+        scale,
+        filter: blur,
+        willChange: 'transform, opacity, filter',
       }}
       className="mb-48 py-12 last:mb-0 relative"
     >
-
       {/* Division Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-gray-700/50 pb-6 mb-12">
-        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tighter text-white shadow-black drop-shadow-2xl break-words">
+        <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-white shadow-black drop-shadow-2xl break-words">
           {formatDivision(division)}
         </h2>
-        <span className="text-xl sm:text-2xl font-mono text-primary-400 mt-4 md:mt-0 font-bold">
+        <span className="text-2xl font-mono text-primary-400 mt-4 md:mt-0 font-bold">
           {String(members.length).padStart(2, '0')}
         </span>
       </div>
@@ -113,16 +147,16 @@ function DivisionSection({
 export default function LeadershipPage() {
   const [coreLeadership, setCoreLeadership] = useState<LeadershipMember[]>([]);
   const [groupedByDivision, setGroupedByDivision] = useState<Record<string, LeadershipMember[]>>({});
-  const [_loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   // Parallax Setup
   const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollY } = useScroll(); // Use global scroll for sticky effect
+  const { scrollY } = useScroll();
 
-  // Optimized parallax: Lighter blur effect for mobile performance
+  // Hero parallax transforms
   const y = useTransform(scrollY, [0, 1000], [0, 400]);
   const opacity = useTransform(scrollY, [0, 500], [1, 0.3]);
-  const blur = useTransform(scrollY, [0, 400], ["blur(0px)", "blur(10px)"]); // Reduced from 20px to 10px
+  const blur = useTransform(scrollY, [0, 400], ["blur(0px)", "blur(10px)"]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -155,13 +189,9 @@ export default function LeadershipPage() {
     fetchData();
   }, []);
 
-
   return (
     <div className="min-h-screen bg-black" ref={containerRef}>
-      {/* 
-        FIXED BACKGROUND LAYER 
-        Contains the Title "LEADERSHIP" which stays and gets blurred/covered
-      */}
+      {/* Fixed Background Hero */}
       <div className="fixed inset-0 z-0 flex items-start pt-32 justify-center pointer-events-none px-4">
         <motion.div
           style={{
@@ -169,7 +199,7 @@ export default function LeadershipPage() {
             opacity,
             filter: blur,
             willChange: 'transform, opacity, filter',
-            transform: 'translateZ(0)', // Force GPU acceleration
+            transform: 'translateZ(0)',
           }}
           className="text-center w-full max-w-4xl"
         >
@@ -181,78 +211,106 @@ export default function LeadershipPage() {
           </p>
         </motion.div>
 
-        {/* Ambient Background Glows - Optimized for mobile */}
+        {/* Ambient Glows - Desktop only */}
         <div className="hidden md:block absolute top-1/4 left-1/4 w-[30rem] h-[30rem] bg-primary-900/20 rounded-full blur-[80px] -z-10" />
         <div className="hidden md:block absolute bottom-1/4 right-1/4 w-[25rem] h-[25rem] bg-secondary-900/20 rounded-full blur-[80px] -z-10" />
       </div>
 
-      {/* 
-        SCROLLABLE CONTENT LAYER 
-        This div scrolls normally. We add a huge top margin (spacer) so we see the hero first.
-        Then the content slides UP over the fixed background.
-      */}
+      {/* Scrollable Content */}
       <div className="relative z-10">
-
-        {/* Spacer to show the Hero Title initially */}
+        {/* Spacer */}
         <div className="h-[60vh] w-full" />
 
-        {/* Core Team - Slides over the title */}
+        {/* Core Team */}
         <section className="pb-20 md:pb-32 text-white min-h-screen">
           <div className="container-custom pt-20">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-8">
-              {coreLeadership.map((member, index) => (
-                <motion.div
-                  key={member.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-50px", amount: 0.3 }}
-                  transition={{
-                    delay: index * 0.05,
-                    duration: 0.4,
-                    ease: "easeOut"
-                  }}
-                  className="group relative"
-                >
-                  {/* Poster Image */}
-                  <div className="relative aspect-[3/4] overflow-hidden mb-6 bg-gray-900 flex items-center justify-center">
-                    {member.photo ? (
-                      <>
-                        <Image
-                          src={member.photo}
-                          alt={member.name}
-                          fill
-                          sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                          priority={index < 4}
-                          loading={index < 4 ? "eager" : "lazy"}
-                          className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500 ease-out"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      </>
-                    ) : (
-                      <div className="flex flex-col items-center justify-center text-gray-700 group-hover:text-primary-500 transition-colors">
-                        <User className="w-20 h-20 mb-4" />
-                        <span className="text-xs uppercase tracking-widest">Tanpa Foto</span>
-                      </div>
-                    )}
-                  </div>
+            {loading ? (
+              // Skeleton Loader for Core Team
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-8">
+                {[...Array(4)].map((_, i) => (
+                  <CoreMemberSkeleton key={i} />
+                ))}
+              </div>
+            ) : (
+              // Actual Core Team
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-8">
+                {coreLeadership.map((member, index) => (
+                  <motion.div
+                    key={member.id}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-50px", amount: 0.3 }}
+                    transition={{
+                      delay: index * 0.05,
+                      duration: 0.4,
+                      ease: "easeOut"
+                    }}
+                    className="group relative"
+                  >
+                    {/* Poster Image */}
+                    <div className="relative aspect-[3/4] overflow-hidden mb-6 bg-gray-900 flex items-center justify-center rounded">
+                      {member.photo ? (
+                        <>
+                          <Image
+                            src={member.photo}
+                            alt={member.name}
+                            fill
+                            sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                            priority={index < 4}
+                            loading={index < 4 ? "eager" : "lazy"}
+                            className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500 ease-out"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        </>
+                      ) : (
+                        <div className="flex flex-col items-center justify-center text-gray-700 group-hover:text-primary-500 transition-colors">
+                          <User className="w-20 h-20 mb-4" />
+                          <span className="text-xs uppercase tracking-widest">Tanpa Foto</span>
+                        </div>
+                      )}
+                    </div>
 
-                  {/* Minimal Typography */}
-                  <div className="border-t border-gray-800 pt-4 group-hover:border-white transition-colors duration-300">
-                    <h3 className="text-xl font-bold mb-1 tracking-tight text-white group-hover:text-primary-400 transition-colors">{member.name}</h3>
-                    <p className="text-gray-500 text-xs font-mono tracking-widest uppercase">
-                      {formatPosition(member.position)}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
+                    {/* Typography */}
+                    <div className="border-t border-gray-800 pt-4 group-hover:border-white transition-colors duration-300">
+                      <h3 className="text-xl font-bold mb-1 tracking-tight text-white group-hover:text-primary-400 transition-colors">{member.name}</h3>
+                      <p className="text-gray-500 text-xs font-mono tracking-widest uppercase">
+                        {formatPosition(member.position)}
+                      </p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            )}
           </div>
 
-          {/* Division Leadership Section */}
-          <div className="container-custom mt-32">
-            {Object.entries(groupedByDivision).map(([division, members]) => (
-              <DivisionSection key={division} division={division} members={members} />
-            ))}
+          {/* Division Leadership */}
+          <div className="container-custom mt-32 overflow-hidden">
+            {loading ? (
+              // Skeleton Loader for Divisions
+              <div className="space-y-32">
+                {[...Array(3)].map((_, i) => (
+                  <div key={i} className="animate-pulse">
+                    {/* Division Header Skeleton */}
+                    <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-gray-700/50 pb-6 mb-12">
+                      <div className="h-12 bg-gray-800 rounded w-64" />
+                      <div className="h-8 bg-gray-800 rounded w-12 mt-4 md:mt-0" />
+                    </div>
+
+                    {/* Members Skeleton */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-12">
+                      {[...Array(6)].map((_, j) => (
+                        <DivisionMemberSkeleton key={j} />
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              // Actual Divisions
+              Object.entries(groupedByDivision).map(([division, members]) => (
+                <DivisionSection key={division} division={division} members={members} />
+              ))
+            )}
           </div>
         </section>
       </div>

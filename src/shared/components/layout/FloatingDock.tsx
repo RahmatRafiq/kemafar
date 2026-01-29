@@ -12,6 +12,7 @@ import { ROUTES } from '@/config/navigation.config';
 import { cn } from '@/shared/utils/cn';
 import { motion } from 'framer-motion';
 import { Home, Info, Users, Mic, Calendar, UserCircle } from 'lucide-react';
+import { useSectionDetection } from '@/shared/hooks/useSectionDetection';
 
 const NAV_ITEMS = [
     { label: 'Beranda', href: ROUTES.home, icon: Home },
@@ -24,6 +25,7 @@ const NAV_ITEMS = [
 
 export function FloatingDock() {
     const pathname = usePathname();
+    const sectionType = useSectionDetection();
 
     return (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[999] md:bottom-auto md:top-8">
@@ -32,12 +34,18 @@ export function FloatingDock() {
                 <div
                     className={cn(
                         "flex items-center gap-1 md:gap-2 px-2 py-2 md:px-3 md:py-2.5",
-                        "bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl",
+                        "backdrop-blur-xl shadow-2xl",
                         "rounded-full transition-all duration-300",
-                        "hover:bg-white/20 hover:scale-[1.02] hover:border-white/30"
+                        "hover:scale-[1.02]",
+                        // Adaptive based on section detection
+                        sectionType === 'light'
+                            ? "bg-gray-900/30 border border-white/30 shadow-black/10 hover:bg-gray-900/40"
+                            : "bg-white/20 border border-white/40 shadow-white/5 hover:bg-white/30"
                     )}
                     style={{
-                        boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.15)',
+                        boxShadow: sectionType === 'light'
+                            ? '0 8px 32px 0 rgba(0, 0, 0, 0.15)'
+                            : '0 8px 32px 0 rgba(31, 38, 135, 0.15)',
                     }}
                 >
                     {NAV_ITEMS.map((item) => {
@@ -69,7 +77,11 @@ export function FloatingDock() {
                                     {/* Icon */}
                                     <div className={cn(
                                         "relative z-10 flex items-center justify-center transition-colors duration-200",
-                                        isActive ? "text-white" : "text-gray-600 group-hover:text-gray-800"
+                                        isActive
+                                            ? "text-white"
+                                            : sectionType === 'light'
+                                                ? "text-white/90 group-hover:text-white"
+                                                : "text-gray-600 group-hover:text-gray-800"
                                     )}>
                                         <Icon className="w-5 h-5 md:w-6 md:h-6" strokeWidth={2} />
                                     </div>
