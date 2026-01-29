@@ -31,6 +31,96 @@ function formatDivision(division: string): string {
 // Core positions determined by absence of division (already dynamic)
 const corePositions = ['ketua', 'wakil-ketua', 'sekretaris', 'bendahara'];
 
+function DivisionSection({
+  division,
+  members
+}: {
+  division: string,
+  members: LeadershipMember[]
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"]
+  });
+
+  // Scroll Down: 
+  // 0.0 - 0.35: Enter from Right (250px -> 0)
+  // 0.35 - 0.65: STABLE CENTER (0 -> 0) - This gives the "Auto Center" feel
+  // 0.65 - 1.0: Exit to Left (0 -> -250px)
+  const x = useTransform(scrollYProgress, [0, 0.35, 0.65, 1], [250, 0, 0, -250]);
+
+  // Spotlight Effects:
+  // Opacity: Fade in/out
+  const opacity = useTransform(scrollYProgress, [0, 0.25, 0.8, 1], [0, 1, 1, 0]);
+  // Scale: Popping effect in center
+  const scale = useTransform(scrollYProgress, [0, 0.35, 0.65, 1], [0.85, 1, 1, 0.85]);
+  // Blur: Blur edges to focus center
+  const blur = useTransform(scrollYProgress, [0, 0.35, 0.65, 1], ["blur(4px)", "blur(0px)", "blur(0px)", "blur(4px)"]);
+  // Background Highlight: Subtle glow when active
+  const bgOpacity = useTransform(scrollYProgress, [0.2, 0.4, 0.6, 0.8], [0, 0.1, 0.1, 0]);
+
+  return (
+    <motion.div
+      ref={ref}
+      style={{ x, opacity, scale, filter: blur }}
+      className="mb-48 py-12 last:mb-0 relative"
+    >
+      {/* Active State Backdrop Glow */}
+      <motion.div
+        style={{ opacity: bgOpacity }}
+        className="absolute -inset-8 bg-gradient-to-r from-transparent via-primary-900/30 to-transparent rounded-3xl -z-10 blur-xl transition-all duration-500"
+      />
+
+      {/* Division Header */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-gray-700/50 pb-6 mb-12">
+        <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-white shadow-black drop-shadow-2xl">
+          {formatDivision(division)}
+        </h2>
+        <span className="text-2xl font-mono text-primary-400 mt-4 md:mt-0 font-bold">
+          {String(members.length).padStart(2, '0')}
+        </span>
+      </div>
+
+      {/* Division Members Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-12">
+        {members.map((member) => (
+          <div
+            key={member.id}
+            className="flex items-center gap-6 group"
+          >
+            {/* Avatar */}
+            <div className="relative w-20 h-20 flex-shrink-0 overflow-hidden rounded-full bg-gray-800 border-2 border-gray-700 group-hover:border-primary-400 group-hover:shadow-[0_0_20px_rgba(var(--primary-rgb),0.5)] transition-all duration-500">
+              {member.photo ? (
+                <Image
+                  src={member.photo}
+                  alt={member.name}
+                  fill
+                  className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-110"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center">
+                  <User className="w-8 h-8 text-gray-500 group-hover:text-primary-400 transition-colors" />
+                </div>
+              )}
+            </div>
+
+            {/* Info */}
+            <div>
+              <h4 className="text-2xl font-bold text-gray-100 group-hover:text-white transition-colors tracking-tight">
+                {member.name}
+              </h4>
+              <p className="text-sm text-primary-300 font-mono mt-1 uppercase tracking-wider group-hover:text-primary-200 transition-colors font-semibold">
+                {formatPosition(member.position)}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </motion.div>
+  );
+}
+
 export default function LeadershipPage() {
   const [coreLeadership, setCoreLeadership] = useState<LeadershipMember[]>([]);
   const [groupedByDivision, setGroupedByDivision] = useState<Record<string, LeadershipMember[]>>({});
@@ -157,66 +247,9 @@ export default function LeadershipPage() {
           </div>
 
           {/* Division Leadership Section */}
-          <div className="container-custom mt-32">
+          <div className="container-custom mt-32 overflow-hidden">
             {Object.entries(groupedByDivision).map(([division, members]) => (
-              <motion.div
-                key={division}
-                className="mb-24 last:mb-0"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
-              >
-                {/* Division Header */}
-                <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-gray-800 pb-6 mb-12">
-                  <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter text-white/90">
-                    {formatDivision(division)}
-                  </h2>
-                  <span className="text-xl font-mono text-gray-600 mt-4 md:mt-0">
-                    {String(members.length).padStart(2, '0')}
-                  </span>
-                </div>
-
-                {/* Division Members Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-12">
-                  {members.map((member, idx) => (
-                    <motion.div
-                      key={member.id}
-                      className="flex items-center gap-6 group"
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: idx * 0.05 }}
-                    >
-                      {/* Avatar */}
-                      <div className="relative w-16 h-16 flex-shrink-0 overflow-hidden rounded-full bg-gray-800">
-                        {member.photo ? (
-                          <Image
-                            src={member.photo}
-                            alt={member.name}
-                            fill
-                            className="object-cover grayscale group-hover:grayscale-0 transition-all duration-300"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center">
-                            <User className="w-6 h-6 text-gray-600" />
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Info */}
-                      <div>
-                        <h4 className="text-lg font-bold text-gray-200 group-hover:text-white transition-colors">
-                          {member.name}
-                        </h4>
-                        <p className="text-xs text-gray-500 font-mono mt-1 uppercase tracking-wide">
-                          {formatPosition(member.position)}
-                        </p>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
+              <DivisionSection key={division} division={division} members={members} />
             ))}
           </div>
         </section>
