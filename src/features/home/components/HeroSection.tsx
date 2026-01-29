@@ -63,18 +63,18 @@ export function HeroSection({ data }: HeroSectionProps) {
               <span className="text-sm font-medium text-secondary-600 tracking-wide uppercase">{data.badge}</span>
             </motion.div>
 
-            {/* Headline with Logo - Mobile inline, Desktop separate */}
-            <div className="flex flex-col lg:block gap-6 mb-8">
-              {/* Mobile Logo - Inline with heading */}
+            {/* Headline with Logo - Side by side on mobile */}
+            <div className="flex items-start gap-4 lg:block mb-8">
+              {/* Mobile Logo - Side by side with heading */}
               <motion.div
                 variants={item}
-                className="lg:hidden w-32 h-32 bg-white rounded-3xl shadow-xl p-4 flex items-center justify-center"
+                className="lg:hidden flex-shrink-0 w-24 h-24 sm:w-28 sm:h-28 bg-white rounded-2xl shadow-xl p-3 flex items-center justify-center"
               >
                 <Image
                   src="/images/logo-hero.jpeg"
                   alt="Logo HMJF"
-                  width={128}
-                  height={128}
+                  width={112}
+                  height={112}
                   className="object-contain"
                   priority
                 />
@@ -83,7 +83,7 @@ export function HeroSection({ data }: HeroSectionProps) {
               {/* Headline - Massive & Tight - LCP Element Optimized */}
               <motion.h1
                 variants={item}
-                className="text-6xl md:text-7xl lg:text-8xl font-black text-primary-600 leading-[1.1] md:leading-[1] tracking-tighter"
+                className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black text-primary-600 leading-[1.1] md:leading-[1] tracking-tighter flex-1"
                 style={{ contentVisibility: 'auto', minHeight: '200px' }}
               >
                 {data.title}
