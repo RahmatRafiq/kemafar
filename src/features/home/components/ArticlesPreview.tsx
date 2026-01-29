@@ -81,16 +81,17 @@ export function ArticlesPreview() {
         {loading ? (
           <ArticlesSkeleton />
         ) : (
-          /* Bento Grid - Clean & Consistent */
+          /* Bento Grid - Balanced Pattern */
           <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
             {articles.map((article, index) => {
-              // Bento grid pattern: Featured (8 cols, 2 rows), then 4-4-6-6
+              // Better bento grid pattern: Featured (7 cols, 2 rows), Small (5 cols), then 3x Medium (4 cols each)
               const gridClass =
-                index === 0 ? 'md:col-span-8 md:row-span-2' :
-                  index === 1 || index === 2 ? 'md:col-span-4' :
-                    'md:col-span-6';
+                index === 0 ? 'md:col-span-7 md:row-span-2' :
+                  index === 1 ? 'md:col-span-5 md:row-span-2' :
+                    'md:col-span-4';
 
               const isFeatured = index === 0;
+              const isLarge = index === 0 || index === 1;
 
               return (
                 <Link
@@ -99,7 +100,7 @@ export function ArticlesPreview() {
                   className={`group relative ${gridClass}`}
                 >
                   {/* Image - larger, more prominent */}
-                  <div className={`relative overflow-hidden rounded-3xl ${isFeatured ? 'aspect-[4/5]' : 'aspect-[16/10]'}`}>
+                  <div className={`relative overflow-hidden rounded-3xl ${isFeatured ? 'aspect-[4/5]' : isLarge ? 'aspect-[3/4]' : 'aspect-[16/10]'}`}>
                     <Image
                       src={article.coverImage}
                       alt={article.title}
@@ -123,7 +124,7 @@ export function ArticlesPreview() {
                         <Calendar className="w-4 h-4" />
                         <time>{format(new Date(article.publishedAt), 'd MMM yyyy', { locale: id })}</time>
                       </div>
-                      <h3 className={`font-bold text-white mb-3 line-clamp-2 ${isFeatured ? 'text-2xl md:text-3xl' : 'text-xl md:text-2xl'}`}>
+                      <h3 className={`font-bold text-white mb-3 line-clamp-2 ${isFeatured ? 'text-2xl md:text-3xl' : isLarge ? 'text-xl md:text-2xl' : 'text-lg md:text-xl'}`}>
                         {article.title}
                       </h3>
                       {isFeatured && (
