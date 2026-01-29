@@ -82,7 +82,7 @@ export function EventsGrid({ events, statusColors, statusLabels }: EventsGridPro
                       whileHover={{ scale: 1.1 }}
                       className="px-4 py-2 bg-secondary-500 text-white text-sm font-bold rounded-full shadow-lg"
                     >
-                      Featured
+                      Unggulan
                     </motion.span>
                   )}
                 </div>

@@ -21,7 +21,7 @@ export function FileUpload({
     accept = 'image/*',
     maxSizeMB = 5,
     className = '',
-    label = 'Upload Image',
+    label = 'Unggah Gambar',
 }: FileUploadProps) {
     const [loading, setLoading] = useState(false);
     const [dragActive, setDragActive] = useState(false);
@@ -30,13 +30,13 @@ export function FileUpload({
     const handleFile = async (file: File) => {
         // Validate size
         if (file.size > maxSizeMB * 1024 * 1024) {
-            toast.error(`File too large. Max size is ${maxSizeMB}MB`);
+            toast.error(`Ukuran file terlalu besar. Maksimal ${maxSizeMB}MB`);
             return;
         }
 
         // Validate type
         if (accept && !file.type.match(accept.replace('*', '.*'))) {
-            toast.error('Invalid file type');
+            toast.error('Tipe file tidak valid');
             return;
         }
 
@@ -44,10 +44,10 @@ export function FileUpload({
             setLoading(true);
             const url = await onUpload(file);
             onChange(url);
-            toast.success('Upload successful');
+            toast.success('Berhasil diunggah');
         } catch (error) {
             console.error('Upload error:', error);
-            toast.error('Failed to upload file');
+            toast.error('Gagal mengunggah file');
         } finally {
             setLoading(false);
         }
@@ -124,10 +124,10 @@ export function FileUpload({
 
                         <div className="space-y-1">
                             <p className="text-sm font-medium text-gray-900">
-                                {loading ? 'Uploading...' : 'Click or drop file to upload'}
+                                {loading ? 'Mengunggah...' : 'Klik atau letakkan file untuk mengunggah'}
                             </p>
                             <p className="text-xs text-gray-500">
-                                Max file size: {maxSizeMB}MB
+                                Ukuran maksimal: {maxSizeMB}MB
                             </p>
                         </div>
                     </div>
@@ -138,7 +138,7 @@ export function FileUpload({
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                             src={value}
-                            alt="Uploaded file"
+                            alt="File terunggah"
                             className="w-full h-full object-cover"
                         />
                         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center">
@@ -153,7 +153,7 @@ export function FileUpload({
                         {/* Overlay for "Change" action could be added here if needed */}
                     </div>
                     <div className="absolute bottom-2 right-2 px-2 py-1 bg-black/60 text-white text-xs rounded backdrop-blur-sm">
-                        Uploaded
+                        Terunggah
                     </div>
                 </div>
             )}

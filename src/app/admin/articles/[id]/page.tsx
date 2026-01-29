@@ -191,7 +191,7 @@ export default function ArticlePage() {
           </FormField>
 
           <FormCheckbox
-            label="Featured Article"
+            label="Artikel Unggulan"
             id="featured"
             checked={formData.featured}
             onChange={(checked) => updateField('featured', checked)}

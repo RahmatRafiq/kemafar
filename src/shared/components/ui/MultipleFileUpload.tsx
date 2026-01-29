@@ -22,7 +22,7 @@ export function MultipleFileUpload({
     accept = 'image/*',
     maxSizeMB = 5,
     className = '',
-    label = 'Upload Images',
+    label = 'Unggah Gambar',
     maxFiles = 10,
 }: MultipleFileUploadProps) {
     const [loading, setLoading] = useState(false);
@@ -31,19 +31,19 @@ export function MultipleFileUpload({
 
     const handleFiles = async (files: File[]) => {
         if (value.length + files.length > maxFiles) {
-            toast.error(`Maximum ${maxFiles} files allowed`);
+            toast.error(`Maksimal ${maxFiles} file diperbolehkan`);
             return;
         }
 
         const validFiles = files.filter(file => {
             // Validate size
             if (file.size > maxSizeMB * 1024 * 1024) {
-                toast.error(`File ${file.name} too large. Max size is ${maxSizeMB}MB`);
+                toast.error(`File ${file.name} terlalu besar. Maksimal ${maxSizeMB}MB`);
                 return false;
             }
             // Validate type
             if (accept && !file.type.match(accept.replace('*', '.*'))) {
-                toast.error(`File ${file.name} has invalid type`);
+                toast.error(`File ${file.name} memiliki tipe tidak valid`);
                 return false;
             }
             return true;
@@ -56,10 +56,10 @@ export function MultipleFileUpload({
             const uploadPromises = validFiles.map(file => onUpload(file));
             const uploadedUrls = await Promise.all(uploadPromises);
             onChange([...value, ...uploadedUrls]);
-            toast.success(`Successfully uploaded ${uploadedUrls.length} file(s)`);
+            toast.success(`Berhasil mengunggah ${uploadedUrls.length} file`);
         } catch (error) {
             console.error('Upload error:', error);
-            toast.error('Failed to upload some files');
+            toast.error('Gagal mengunggah beberapa file');
         } finally {
             setLoading(false);
         }
@@ -134,10 +134,10 @@ export function MultipleFileUpload({
 
                     <div className="space-y-1">
                         <p className="text-sm font-medium text-gray-900">
-                            {loading ? 'Uploading...' : 'Click or drop files to upload'}
+                            {loading ? 'Mengunggah...' : 'Klik atau letakkan file untuk mengunggah'}
                         </p>
                         <p className="text-xs text-gray-500">
-                            Max {maxFiles} files, {maxSizeMB}MB each
+                            Maks {maxFiles} file, {maxSizeMB}MB per file
                         </p>
                     </div>
                 </div>
@@ -151,7 +151,7 @@ export function MultipleFileUpload({
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img
                                 src={url}
-                                alt={`Uploaded ${index + 1}`}
+                                alt={`Terunggah ${index + 1}`}
                                 className="w-full h-full object-cover"
                             />
                             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center gap-2">
@@ -161,10 +161,10 @@ export function MultipleFileUpload({
                                         // Copy as markdown image syntax so it renders in the editor
                                         const markdownImage = `![Image](${url})`;
                                         navigator.clipboard.writeText(markdownImage);
-                                        toast.success('Image copied! Paste into editor.');
+                                        toast.success('Gambar disalin! Paste ke editor.');
                                     }}
                                     className="bg-white/90 p-1.5 rounded-full shadow-sm opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition-all duration-200 hover:bg-white hover:text-blue-500"
-                                    title="Copy URL"
+                                    title="Salin URL"
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-copy"><rect width="14" height="14" x="8" y="8" rx="2" ry="2" /><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" /></svg>
                                 </button>

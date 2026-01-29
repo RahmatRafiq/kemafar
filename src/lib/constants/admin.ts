@@ -60,10 +60,10 @@ export const ARTICLE_STATUSES = [
  * Event Statuses
  */
 export const EVENT_STATUSES = [
-  { value: 'upcoming', label: 'Upcoming' },
-  { value: 'ongoing', label: 'Ongoing' },
-  { value: 'completed', label: 'Completed' },
-  { value: 'cancelled', label: 'Cancelled' },
+  { value: 'upcoming', label: 'Akan Datang' },
+  { value: 'ongoing', label: 'Sedang Berlangsung' },
+  { value: 'completed', label: 'Selesai' },
+  { value: 'cancelled', label: 'Dibatalkan' },
 ] as const;
 
 /**

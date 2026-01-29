@@ -61,17 +61,17 @@ export default function LoginPage() {
         <div className="text-center mb-8">
           <Link href="/" className="inline-block">
             <h1 className="text-3xl font-bold text-emerald-600">{SITE_CONFIG.name}</h1>
-            <p className="text-sm text-gray-600 mt-1">Admin Panel</p>
+            <p className="text-sm text-gray-600 mt-1">Panel Admin</p>
           </Link>
         </div>
 
         <div className="bg-white rounded-2xl shadow-xl p-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">Sign In</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">Masuk</h2>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                Email Address
+                Alamat Email
               </label>
               <input
                 id="email"
@@ -86,7 +86,7 @@ export default function LoginPage() {
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-2">
-                Password
+                Kata Sandi
               </label>
               <input
                 id="password"
@@ -110,19 +110,19 @@ export default function LoginPage() {
               disabled={loading}
               className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-300 text-white font-medium py-3 rounded-lg transition-colors duration-200"
             >
-              {loading ? 'Signing in...' : 'Sign In'}
+              {loading ? 'Masuk...' : 'Masuk'}
             </button>
           </form>
 
           <div className="mt-6 text-center text-sm text-gray-600">
             <Link href="/" className="hover:text-emerald-600 transition-colors">
-              ← Back to Website
+              ← Kembali ke Website
             </Link>
           </div>
         </div>
 
         <p className="text-center text-sm text-gray-500 mt-6">
-          Need access? Contact your administrator
+          Butuh akses? Hubungi administrator
         </p>
       </div>
     </div>

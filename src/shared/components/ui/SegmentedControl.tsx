@@ -156,7 +156,7 @@ export function SegmentedControl({
       'px-6 py-2.5 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-300',
       active
         ? 'bg-primary-700 text-white shadow-md shadow-primary-500/30 ring-0'
-        : 'text-gray-900 group-hover:text-gray-950 font-medium hover:bg-white/50'
+        : 'text-gray-900 group-hover:text-gray-950 font-medium hover:bg-white/80 hover:shadow-sm'
     );
 
   const scroll = (direction: 'left' | 'right') => {

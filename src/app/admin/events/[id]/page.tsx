@@ -24,10 +24,10 @@ const CATEGORIES = [
 ];
 
 const STATUSES = [
-  { value: 'upcoming', label: 'Upcoming' },
-  { value: 'ongoing', label: 'Ongoing' },
-  { value: 'completed', label: 'Completed' },
-  { value: 'cancelled', label: 'Cancelled' },
+  { value: 'upcoming', label: 'Akan Datang' },
+  { value: 'ongoing', label: 'Sedang Berlangsung' },
+  { value: 'completed', label: 'Selesai' },
+  { value: 'cancelled', label: 'Dibatalkan' },
 ];
 
 const LOCATION_TYPES = [
@@ -307,7 +307,7 @@ export default function EventFormPage() {
           </div>
 
           <FormCheckbox
-            label="Featured Event"
+            label="Event Unggulan"
             id="featured"
             checked={formData.featured}
             onChange={(checked) => setFormData({ ...formData, featured: checked })}

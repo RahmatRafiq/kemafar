@@ -12,8 +12,8 @@ export default function ArticleDetailError({
   return (
     <div className="min-h-screen bg-gray-50">
       <ErrorState
-        title="Failed to load article"
-        message="We could not load this article. It may have been moved or deleted."
+        title="Gagal Memuat Artikel"
+        message="Kami tidak dapat memuat artikel ini. Mungkin sudah dipindahkan atau dihapus."
         error={error}
         onRetry={reset}
         showDetails={process.env.NODE_ENV === 'development'}
