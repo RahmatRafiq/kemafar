@@ -63,18 +63,38 @@ export function HeroSection({ data }: HeroSectionProps) {
               <span className="text-sm font-medium text-secondary-600 tracking-wide uppercase">{data.badge}</span>
             </motion.div>
 
-            {/* Headline - Massive & Tight - LCP Element Optimized */}
-            <motion.h1
-              variants={item}
-              className="text-6xl md:text-7xl lg:text-8xl font-black text-primary-600 leading-[1.1] md:leading-[1] tracking-tighter mb-8"
-              style={{ contentVisibility: 'auto', minHeight: '200px' }}
-            >
-              {data.title}
-              <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-secondary-600">
-                {data.titleHighlight}
-              </span>
-            </motion.h1>
+            {/* Headline with Logo - Horizontal logo style on mobile */}
+            <div className="flex items-center gap-4 lg:block mb-8">
+              {/* Mobile Logo - Same height as text */}
+              <motion.div
+                variants={item}
+                className="lg:hidden flex-shrink-0 w-28 h-32 sm:w-32 sm:h-36 bg-white rounded-2xl shadow-xl p-3 flex items-center justify-center"
+              >
+                <Image
+                  src="/images/logo-hero.jpeg"
+                  alt="Logo HMJF"
+                  width={128}
+                  height={128}
+                  className="object-contain"
+                  priority
+                />
+              </motion.div>
+
+              {/* Headline - Same height container on mobile */}
+              <motion.h1
+                variants={item}
+                className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black text-primary-600 leading-tight tracking-tighter flex-1 h-32 sm:h-36 lg:h-auto flex lg:block items-center"
+                style={{ contentVisibility: 'auto' }}
+              >
+                <span className="block lg:inline">
+                  {data.title}
+                  <br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-secondary-600">
+                    {data.titleHighlight}
+                  </span>
+                </span>
+              </motion.h1>
+            </div>
 
             {/* Description - Reader friendly */}
             <motion.p variants={item} className="text-lg md:text-xl text-secondary-600 leading-relaxed max-w-2xl border-l-4 border-primary-200 pl-6 mb-10">
@@ -115,40 +135,42 @@ export function HeroSection({ data }: HeroSectionProps) {
             </motion.div>
           </motion.div>
 
-          {/* Visual - Editorial Image Composition (No Card Box) */}
+          {/* Visual - Editorial Image Composition (Desktop Only) */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0 }}
-            className="lg:col-span-5 relative h-[600px] hidden lg:block"
+            className="hidden lg:block lg:col-span-5 relative h-[600px]"
             style={{ minHeight: '600px' }}
           >
             {/* Main Hero Image - Organic Shape */}
             <div className="relative z-10 w-full h-full">
-              <div className="absolute right-0 top-0 w-4/5 h-4/5 rounded-[4rem] rounded-tr-[10rem] overflow-hidden shadow-2xl shadow-primary-900/10" style={{ transform: 'rotate(3deg)' }}>
-                <Image
-                  src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80&w=2070"
-                  alt="Mahasiswa Farmasi"
-                  fill
-                  className="object-cover"
-                  priority
-                  fetchPriority="high"
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  placeholder="blur"
-                  blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAb/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-primary-900/30 to-transparent" />
+              <div className="absolute right-0 top-0 w-4/5 h-4/5 rounded-[4rem] rounded-tr-[10rem] overflow-hidden shadow-2xl shadow-primary-900/10 bg-white p-6 flex items-center justify-center" style={{ transform: 'rotate(3deg)' }}>
+                <div className="relative w-full h-full" style={{ transform: 'rotate(-3deg)' }}>
+                  <Image
+                    src="/images/logo-hero.jpeg"
+                    alt="HIMPUNAN MAHASISWA JURUSAN FARMASI UIN ALAUDDIN MAKASSAR"
+                    fill
+                    className="object-contain p-4"
+                    priority
+                    fetchPriority="high"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-primary-900/5 to-transparent pointer-events-none" />
               </div>
 
               {/* Floating Accent Image */}
-              <div className="absolute left-0 bottom-20 w-3/5 h-2/5 rounded-[3rem] rounded-bl-[6rem] overflow-hidden shadow-xl shadow-secondary-900/10 border-4 border-white" style={{ transform: 'rotate(-6deg)' }}>
-                <Image
-                  src="https://images.unsplash.com/photo-1631549916768-4119b2e5f926?auto=format&fit=crop&q=80&w=2079"
-                  alt="Kerja Laboratorium"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 30vw"
-                />
+              <div className="absolute left-0 bottom-20 w-3/5 h-2/5 rounded-[3rem] rounded-bl-[6rem] overflow-hidden shadow-xl shadow-secondary-900/10 border-4 border-white bg-white p-4 flex items-center justify-center" style={{ transform: 'rotate(-6deg)' }}>
+                <div className="relative w-full h-full" style={{ transform: 'rotate(6deg)' }}>
+                  <Image
+                    src="/images/logo-hero.jpeg"
+                    alt="Logo HMJF"
+                    fill
+                    className="object-contain p-2"
+                    sizes="(max-width: 768px) 100vw, 30vw"
+                  />
+                </div>
               </div>
 
               {/* Minimal floating elements */}

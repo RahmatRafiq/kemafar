@@ -7,15 +7,18 @@
  */
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { ROUTES } from '@/config/navigation.config';
 import { cn } from '@/shared/utils/cn';
 import { motion } from 'framer-motion';
-import { Home, Info, Users, Mic, Calendar, UserCircle } from 'lucide-react';
+import { Info, Users, Mic, Calendar, UserCircle, type LucideIcon } from 'lucide-react';
 import { useSectionDetection } from '@/shared/hooks/useSectionDetection';
 
-const NAV_ITEMS = [
-    { label: 'Beranda', href: ROUTES.home, icon: Home },
+type NavIcon = LucideIcon | 'custom-logo';
+
+const NAV_ITEMS: Array<{ label: string; href: string; icon: NavIcon }> = [
+    { label: 'Beranda', href: ROUTES.home, icon: 'custom-logo' },
     { label: 'Tentang', href: ROUTES.about, icon: Info },
     { label: 'Event', href: ROUTES.events, icon: Calendar },
     { label: 'Artikel', href: ROUTES.articles, icon: Mic },
@@ -51,6 +54,7 @@ export function FloatingDock() {
                     {NAV_ITEMS.map((item) => {
                         const isActive = pathname === item.href;
                         const Icon = item.icon;
+                        const isCustomLogo = Icon === 'custom-logo';
 
                         return (
                             <Link
@@ -61,9 +65,13 @@ export function FloatingDock() {
                             >
                                 <div
                                     className={cn(
-                                        "relative flex items-center justify-center w-10 h-10 md:w-12 md:h-12 rounded-full transition-all duration-300",
+                                        "relative flex items-center justify-center rounded-full transition-all duration-300",
                                         "hover:bg-white/20",
-                                        isActive && "text-white"
+                                        isActive && "text-white",
+                                        // Wider when custom logo is inactive
+                                        isCustomLogo && !isActive
+                                            ? "w-auto h-10 md:h-12 px-3 md:px-4 gap-2"
+                                            : "w-10 h-10 md:w-12 md:h-12"
                                     )}
                                 >
                                     {/* Active Background Pill */}
@@ -77,14 +85,50 @@ export function FloatingDock() {
 
                                     {/* Icon */}
                                     <div className={cn(
-                                        "relative z-10 flex items-center justify-center transition-colors duration-200",
-                                        isActive
+                                        "relative z-10 flex items-center gap-2 transition-colors duration-200",
+                                        !isCustomLogo && (isActive
                                             ? "text-white"
                                             : sectionType === 'light'
                                                 ? "text-white/90 group-hover:text-white"
-                                                : "text-gray-600 group-hover:text-gray-800"
+                                                : "text-gray-600 group-hover:text-gray-800")
                                     )}>
-                                        <Icon className="w-5 h-5 md:w-6 md:h-6" strokeWidth={2} />
+                                        {isCustomLogo ? (
+                                            <>
+                                                <motion.div
+                                                    className={cn(
+                                                        "relative flex-shrink-0 transition-all duration-200 rounded-lg flex items-center justify-center",
+                                                        !isActive
+                                                            ? "w-6 h-6 md:w-7 md:h-7 bg-white/90 shadow-md p-0.5 backdrop-blur-sm"
+                                                            : "w-6 h-6 md:w-7 md:h-7"
+                                                    )}
+                                                    whileHover={!isActive ? { scale: 1.05 } : {}}
+                                                    whileTap={!isActive ? { scale: 0.95 } : {}}
+                                                >
+                                                    <Image
+                                                        src={isActive ? "/icons/logo-active.webp" : "/icons/logo-inactive.webp"}
+                                                        alt="Home"
+                                                        fill
+                                                        className={cn(
+                                                            "object-contain transition-all duration-200",
+                                                            !isActive && "p-0.5"
+                                                        )}
+                                                        sizes="32px"
+                                                    />
+                                                </motion.div>
+                                                {!isActive && (
+                                                    <motion.span
+                                                        initial={{ opacity: 0, width: 0 }}
+                                                        animate={{ opacity: 1, width: "auto" }}
+                                                        exit={{ opacity: 0, width: 0 }}
+                                                        className="text-xs md:text-sm font-bold text-primary-600 whitespace-nowrap"
+                                                    >
+                                                        Beranda
+                                                    </motion.span>
+                                                )}
+                                            </>
+                                        ) : (
+                                            <Icon className="w-5 h-5 md:w-6 md:h-6" strokeWidth={2} />
+                                        )}
                                     </div>
 
                                     {/* Tooltip (Desktop) */}
