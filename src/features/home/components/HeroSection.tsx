@@ -63,9 +63,9 @@ export function HeroSection({ data }: HeroSectionProps) {
               <span className="text-sm font-medium text-secondary-600 tracking-wide uppercase">{data.badge}</span>
             </motion.div>
 
-            {/* Headline with Logo - Side by side on mobile */}
-            <div className="flex items-start gap-4 lg:block mb-8">
-              {/* Mobile Logo - Side by side with heading */}
+            {/* Headline with Logo - Horizontal logo style on mobile */}
+            <div className="flex items-center gap-4 lg:block mb-8">
+              {/* Mobile Logo - Same height as text */}
               <motion.div
                 variants={item}
                 className="lg:hidden flex-shrink-0 w-24 h-24 sm:w-28 sm:h-28 bg-white rounded-2xl shadow-xl p-3 flex items-center justify-center"
@@ -80,16 +80,18 @@ export function HeroSection({ data }: HeroSectionProps) {
                 />
               </motion.div>
 
-              {/* Headline - Massive & Tight - LCP Element Optimized */}
+              {/* Headline - Same height container on mobile */}
               <motion.h1
                 variants={item}
-                className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black text-primary-600 leading-[1.1] md:leading-[1] tracking-tighter flex-1"
-                style={{ contentVisibility: 'auto', minHeight: '200px' }}
+                className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black text-primary-600 leading-tight tracking-tighter flex-1 h-24 sm:h-28 lg:h-auto flex lg:block items-center"
+                style={{ contentVisibility: 'auto' }}
               >
-                {data.title}
-                <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-secondary-600">
-                  {data.titleHighlight}
+                <span className="block lg:inline">
+                  {data.title}
+                  <br />
+                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-600 to-secondary-600">
+                    {data.titleHighlight}
+                  </span>
                 </span>
               </motion.h1>
             </div>
