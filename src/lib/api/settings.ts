@@ -1,5 +1,6 @@
 import { supabase } from '@/lib/supabase/client';
 import { HOME_CONTENT, ABOUT_CONTENT, HomeSettings, AboutSettings } from '@/config';
+import { getTimeline } from './timeline';
 
 /**
  * Site Settings from database (raw)
@@ -17,6 +18,15 @@ interface SiteSettingsRaw {
  * Fetch home settings from database with fallback to config
  */
 export async function getHomeSettings(): Promise<HomeSettings> {
+  // Check if we should use database for settings
+  const useSupabaseSettings = process.env.NEXT_PUBLIC_USE_SUPABASE_SETTINGS === 'true';
+
+  // If flag is disabled, return config immediately
+  if (!useSupabaseSettings) {
+    return HOME_CONTENT;
+  }
+
+  // Fetch from database
   const { data, error } = await supabase
     .from('site_settings')
     .select('*')
@@ -36,17 +46,53 @@ export async function getHomeSettings(): Promise<HomeSettings> {
  * Fetch about settings from database with fallback to config
  */
 export async function getAboutSettings(): Promise<AboutSettings> {
-  const { data, error } = await supabase
-    .from('site_settings')
-    .select('*')
-    .eq('key', 'about')
-    .single();
+  // Check if we should use database for settings
+  const useSupabaseSettings = process.env.NEXT_PUBLIC_USE_SUPABASE_SETTINGS === 'true';
+  const useSupabaseTimeline = process.env.NEXT_PUBLIC_USE_SUPABASE_TIMELINE === 'true';
 
-  // If error or no data, use fallback from config
-  if (error || !data) {
-    return ABOUT_CONTENT;
+  // Get base settings (from database or config based on flag)
+  let baseSettings: AboutSettings = ABOUT_CONTENT;
+
+  if (useSupabaseSettings) {
+    // Fetch settings from site_settings table
+    const { data, error } = await supabase
+      .from('site_settings')
+      .select('*')
+      .eq('key', 'about')
+      .single();
+
+    // Use database settings if available, otherwise fallback to config
+    if (!error && data) {
+      baseSettings = (data as SiteSettingsRaw).content as AboutSettings;
+    }
   }
 
-  // Return content from database
-  return (data as SiteSettingsRaw).content as AboutSettings;
+  // Fetch timeline from organization_timeline table if flag is enabled
+  if (useSupabaseTimeline) {
+    try {
+      const timelineItems = await getTimeline();
+
+      // If timeline exists in database, use it; otherwise use config fallback
+      const timeline = timelineItems.length > 0
+        ? timelineItems.map(item => ({
+            year: item.year,
+            title: item.title,
+            description: item.description,
+          }))
+        : baseSettings.timeline;
+
+      // Return merged settings with timeline from database
+      return {
+        ...baseSettings,
+        timeline,
+      };
+    } catch (timelineError) {
+      console.error('Error fetching timeline, using fallback:', timelineError);
+      // If timeline fetch fails, return base settings with config timeline
+      return baseSettings;
+    }
+  }
+
+  // Return settings (either from config or database, without timeline override)
+  return baseSettings;
 }
