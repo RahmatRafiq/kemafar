@@ -190,7 +190,7 @@ export function AboutContent({ data }: AboutContentProps): JSX.Element {
 
             {/* Timeline */}
             <Section className="py-24">
-                <div className="container-custom">
+                <div className="container-custom max-w-5xl">
                     <div className="text-center mb-16">
                         <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
                             Perjalanan Kami
@@ -198,11 +198,11 @@ export function AboutContent({ data }: AboutContentProps): JSX.Element {
                         <div className="w-24 h-1 bg-gradient-to-r from-primary-500 to-secondary-500 mx-auto rounded-full" />
                     </div>
 
-                    {/* Scrollable container with max-width and centered */}
-                    <div className="relative max-w-5xl mx-auto">
+                    {/* Scrollable container with scroll indicator */}
+                    <div className="relative">
                         <div
                             ref={scrollRef}
-                            className="max-h-[800px] overflow-y-auto scrollbar-thin px-4"
+                            className="max-h-[800px] overflow-y-auto scrollbar-thin"
                         >
                             <Timeline items={data.timeline} />
                         </div>
