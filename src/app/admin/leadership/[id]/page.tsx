@@ -51,7 +51,6 @@ export default function LeadershipFormPage() {
     social_media_twitter: '',
     period_start: '',
     period_end: '',
-    order: 1,
   });
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(false);
@@ -63,7 +62,7 @@ export default function LeadershipFormPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  async function fetchData() {
+  async function fetchData(): Promise<void> {
     setFetching(true);
     try {
       const { data, error } = await supabase
@@ -72,7 +71,10 @@ export default function LeadershipFormPage() {
         .eq('id', id)
         .single();
 
-      if (error) throw error;
+      if (error) {
+        throw error;
+      }
+
       if (!data) {
         toast.error('Data not found');
         router.push('/admin/leadership');
@@ -80,13 +82,25 @@ export default function LeadershipFormPage() {
       }
 
       // Transform social_media from JSONB to form fields
-      const socialMedia = data.social_media as Record<string, string> | null;
+      const record = data as Record<string, unknown>;
+      const socialMedia = record.social_media as Record<string, string> | null | undefined;
+
       setFormData({
-        ...data,
-        social_media_instagram: socialMedia?.instagram || '',
-        social_media_linkedin: socialMedia?.linkedin || '',
-        social_media_twitter: socialMedia?.twitter || '',
-      } as LeadershipFormData);
+        name: record.name as string,
+        position: record.position as string,
+        division: (record.division as string) || '',
+        photo: (record.photo as string) || '',
+        email: (record.email as string) || '',
+        phone: (record.phone as string) || '',
+        nim: (record.nim as string) || '',
+        batch: (record.batch as string) || '',
+        bio: (record.bio as string) || '',
+        period_start: (record.period_start as string) || '',
+        period_end: (record.period_end as string) || '',
+        social_media_instagram: socialMedia?.instagram ?? '',
+        social_media_linkedin: socialMedia?.linkedin ?? '',
+        social_media_twitter: socialMedia?.twitter ?? '',
+      });
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Failed to load data';
       toast.error(message);
@@ -96,7 +110,7 @@ export default function LeadershipFormPage() {
     }
   }
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent): Promise<void> {
     e.preventDefault();
     setLoading(true);
 
@@ -133,23 +147,27 @@ export default function LeadershipFormPage() {
         social_media: Object.keys(socialMedia).length > 0 ? socialMedia : null,
         period_start: data.period_start || defaultDate,
         period_end: data.period_end || defaultDate,
-        order: data.order,
+        order: 1, // Default order value (field required by database but not used in UI)
       };
 
       if (isCreateMode) {
         const { error } = await supabase
           .from('leadership')
-          .insert([dataToSave]);
+          .insert(dataToSave as never);
 
-        if (error) throw error;
+        if (error) {
+          throw error;
+        }
         toast.success('Created successfully');
       } else {
         const { error } = await supabase
           .from('leadership')
-          .update(dataToSave)
+          .update(dataToSave as never)
           .eq('id', id);
 
-        if (error) throw error;
+        if (error) {
+          throw error;
+        }
         toast.success('Updated successfully');
       }
 
@@ -162,7 +180,7 @@ export default function LeadershipFormPage() {
     }
   }
 
-  const handleNameChange = (value: string) => {
+  const handleNameChange = (value: string): void => {
     setFormData({
       ...formData,
       name: value,
@@ -293,15 +311,7 @@ export default function LeadershipFormPage() {
             />
           </div>
 
-          <FormInput
-            label="Order"
-            id="order"
-            type="number"
-            value={(formData.order || 1).toString()}
-            onChange={(value) => setFormData({ ...formData, order: parseInt(value) || 1 })}
-            required
-            placeholder="1"
-          />
+          
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
