@@ -17,7 +17,7 @@ interface AboutContentProps {
     data: AboutSettings;
 }
 
-export function AboutContent({ data }: AboutContentProps) {
+export function AboutContent({ data }: AboutContentProps): JSX.Element {
     return (
         <div className="bg-white min-h-screen">
             {/* Header */}
@@ -167,7 +167,12 @@ export function AboutContent({ data }: AboutContentProps) {
                     <h2 className="text-3xl font-bold text-gray-900 mb-16 text-center">
                         Perjalanan Kami
                     </h2>
-                    <Timeline items={data.timeline} />
+                    {/* Scrollable container with gradient fade */}
+                    <div className="relative max-h-[800px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 hover:scrollbar-thumb-gray-400 pr-4">
+                        <Timeline items={data.timeline} />
+                        {/* Bottom fade gradient for visual cue */}
+                        <div className="sticky bottom-0 h-20 bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none" />
+                    </div>
                 </div>
             </Section>
 
