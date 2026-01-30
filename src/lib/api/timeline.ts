@@ -60,16 +60,16 @@ export async function getTimelineById(id: string): Promise<TimelineItem | null> 
  * Create a new timeline item
  */
 export async function createTimeline(data: TimelineFormData): Promise<TimelineItem> {
+  const insertData = {
+    year: data.year,
+    title: data.title,
+    description: data.description,
+    order_index: data.order_index,
+  };
+
   const { data: newItem, error } = await supabase
     .from('organization_timeline')
-    .insert([
-      {
-        year: data.year,
-        title: data.title,
-        description: data.description,
-        order_index: data.order_index,
-      },
-    ])
+    .insert(insertData as never)
     .select()
     .single();
 
@@ -78,7 +78,7 @@ export async function createTimeline(data: TimelineFormData): Promise<TimelineIt
     throw new Error(`Failed to create timeline item: ${error.message}`);
   }
 
-  return newItem;
+  return newItem as TimelineItem;
 }
 
 /**
@@ -88,15 +88,17 @@ export async function updateTimeline(
   id: string,
   data: TimelineFormData
 ): Promise<TimelineItem> {
+  const updateData = {
+    year: data.year,
+    title: data.title,
+    description: data.description,
+    order_index: data.order_index,
+    updated_at: new Date().toISOString(),
+  };
+
   const { data: updatedItem, error } = await supabase
     .from('organization_timeline')
-    .update({
-      year: data.year,
-      title: data.title,
-      description: data.description,
-      order_index: data.order_index,
-      updated_at: new Date().toISOString(),
-    })
+    .update(updateData as never)
     .eq('id', id)
     .select()
     .single();
@@ -106,7 +108,7 @@ export async function updateTimeline(
     throw new Error(`Failed to update timeline item: ${error.message}`);
   }
 
-  return updatedItem;
+  return updatedItem as TimelineItem;
 }
 
 /**

@@ -23,7 +23,7 @@ export function AboutContent({ data }: AboutContentProps): JSX.Element {
     const [showScrollIndicator, setShowScrollIndicator] = useState(false);
 
     useEffect(() => {
-        const checkScroll = () => {
+        const checkScroll = (): void => {
             if (scrollRef.current) {
                 const { scrollHeight, clientHeight, scrollTop } = scrollRef.current;
                 const hasMoreContent = scrollHeight > clientHeight;
@@ -33,16 +33,18 @@ export function AboutContent({ data }: AboutContentProps): JSX.Element {
         };
 
         const scrollElement = scrollRef.current;
-        if (scrollElement) {
-            checkScroll();
-            scrollElement.addEventListener('scroll', checkScroll);
-            window.addEventListener('resize', checkScroll);
-
-            return () => {
-                scrollElement.removeEventListener('scroll', checkScroll);
-                window.removeEventListener('resize', checkScroll);
-            };
+        if (!scrollElement) {
+            return;
         }
+
+        checkScroll();
+        scrollElement.addEventListener('scroll', checkScroll);
+        window.addEventListener('resize', checkScroll);
+
+        return () => {
+            scrollElement.removeEventListener('scroll', checkScroll);
+            window.removeEventListener('resize', checkScroll);
+        };
     }, [data.timeline]);
 
     return (
