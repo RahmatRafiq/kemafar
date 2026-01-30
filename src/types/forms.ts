@@ -98,3 +98,11 @@ export interface EventFormData {
   tags: string;
   featured: boolean;
 }
+
+// Timeline Forms
+export interface TimelineFormData {
+  year: string;
+  title: string;
+  description: string;
+  order_index: number;
+}
