@@ -211,24 +211,44 @@ export const ABOUT_CONTENT = {
   },
   timeline: [
     {
+      year: '2015',
+      title: 'Pendirian Organisasi',
+      description: 'Himpunan Mahasiswa Jurusan Farmasi UIN Alauddin Makassar resmi didirikan sebagai wadah aspirasi dan pengembangan mahasiswa Farmasi',
+    },
+    {
+      year: '2016',
+      title: 'Peluncuran Program Kaderisasi',
+      description: 'Memulai program kaderisasi terstruktur untuk membentuk karakter dan kepemimpinan mahasiswa Farmasi yang berintegritas',
+    },
+    {
+      year: '2018',
+      title: 'Kerjasama Industri Farmasi',
+      description: 'Menjalin kerjasama dengan berbagai industri farmasi dan rumah sakit untuk program magang dan pengembangan profesional mahasiswa',
+    },
+    {
       year: '2020',
-      title: 'Organization Founded',
-      description: 'Officially established to serve our community',
+      title: 'Adaptasi Digital',
+      description: 'Transformasi digital penuh dalam kegiatan organisasi sebagai respons terhadap pandemi, menghadirkan seminar online dan pelatihan virtual',
     },
     {
       year: '2021',
-      title: 'Program Expansion',
-      description: 'Launched structured programs and initiatives',
+      title: 'Ekspansi Program Keprofesian',
+      description: 'Meluncurkan berbagai program pelatihan keprofesian seperti workshop formulasi, quality control, dan good manufacturing practice',
     },
     {
       year: '2022',
-      title: 'Digital Transformation',
-      description: 'Embraced digital tools for better community engagement',
+      title: 'Penguatan Riset Mahasiswa',
+      description: 'Mendirikan divisi riset dan publikasi ilmiah untuk mendorong mahasiswa aktif dalam penelitian farmasi',
+    },
+    {
+      year: '2023',
+      title: 'Pengabdian Masyarakat Berkelanjutan',
+      description: 'Menginisiasi program pengabdian masyarakat rutin dengan fokus pada edukasi kesehatan dan konseling obat di berbagai wilayah',
     },
     {
       year: '2024',
-      title: 'Continuous Innovation',
-      description: 'Developing innovative programs and cross-institutional collaboration',
+      title: 'Inovasi dan Kolaborasi Nasional',
+      description: 'Mengembangkan program inovasi farmasi dan memperluas jaringan kolaborasi dengan organisasi mahasiswa farmasi se-Indonesia',
     },
   ],
   affiliations: [

@@ -2,9 +2,10 @@
 
 import { Timeline } from '@/features/about/components/Timeline';
 import { Section } from '@/shared/components/ui/Section';
-import { Leaf, Target, Heart, Award, BookOpen, Users, HeartHandshake, Briefcase, LucideIcon } from 'lucide-react';
+import { Leaf, Target, Heart, Award, BookOpen, Users, HeartHandshake, Briefcase, LucideIcon, ChevronDown } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { AboutSettings } from '@/config';
+import { useRef, useState, useEffect } from 'react';
 
 const iconMap: Record<string, LucideIcon> = {
     BookOpen,
@@ -17,7 +18,35 @@ interface AboutContentProps {
     data: AboutSettings;
 }
 
-export function AboutContent({ data }: AboutContentProps) {
+export function AboutContent({ data }: AboutContentProps): JSX.Element {
+    const scrollRef = useRef<HTMLDivElement>(null);
+    const [showScrollIndicator, setShowScrollIndicator] = useState(false);
+
+    useEffect(() => {
+        const checkScroll = (): void => {
+            if (scrollRef.current) {
+                const { scrollHeight, clientHeight, scrollTop } = scrollRef.current;
+                const hasMoreContent = scrollHeight > clientHeight;
+                const isAtBottom = scrollHeight - scrollTop - clientHeight < 10;
+                setShowScrollIndicator(hasMoreContent && !isAtBottom);
+            }
+        };
+
+        const scrollElement = scrollRef.current;
+        if (!scrollElement) {
+            return;
+        }
+
+        checkScroll();
+        scrollElement.addEventListener('scroll', checkScroll);
+        window.addEventListener('resize', checkScroll);
+
+        return () => {
+            scrollElement.removeEventListener('scroll', checkScroll);
+            window.removeEventListener('resize', checkScroll);
+        };
+    }, [data.timeline]);
+
     return (
         <div className="bg-white min-h-screen">
             {/* Header */}
@@ -163,11 +192,40 @@ export function AboutContent({ data }: AboutContentProps) {
 
             {/* Timeline */}
             <Section className="py-24">
-                <div className="container-custom">
-                    <h2 className="text-3xl font-bold text-gray-900 mb-16 text-center">
-                        Perjalanan Kami
-                    </h2>
-                    <Timeline items={data.timeline} />
+                <div className="container-custom max-w-5xl">
+                    <div className="text-center mb-16">
+                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                            Perjalanan Kami
+                        </h2>
+                        <div className="w-24 h-1 bg-gradient-to-r from-primary-500 to-secondary-500 mx-auto rounded-full" />
+                    </div>
+
+                    {/* Scrollable container with scroll indicator */}
+                    <div className="relative">
+                        <div
+                            ref={scrollRef}
+                            className="max-h-[800px] overflow-y-auto scrollbar-thin"
+                        >
+                            <Timeline items={data.timeline} />
+                        </div>
+
+                        {/* Bottom fade gradient with dynamic scroll indicator */}
+                        {showScrollIndicator && (
+                            <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white via-white/90 to-transparent pointer-events-none flex items-end justify-center pb-4">
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: 10 }}
+                                    className="flex flex-col items-center gap-2"
+                                >
+                                    <div className="text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Scroll untuk lebih lanjut
+                                    </div>
+                                    <ChevronDown className="w-5 h-5 text-primary-600 animate-bounce" />
+                                </motion.div>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </Section>
 
