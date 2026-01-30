@@ -81,20 +81,20 @@ export function Timeline({ items }: TimelineProps): JSX.Element {
                 )}
 
                 {/* Year badge with connector dot - centered on line */}
-                <div className="absolute left-1/2 top-6 -translate-x-1/2 z-10">
-                  {/* Connector dot */}
+                <div className="absolute left-1/2 top-0 -translate-x-1/2 z-10">
+                  {/* Connector dot behind badge */}
                   <motion.div
                     initial={{ scale: 0 }}
                     whileInView={{ scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.3, delay: index * 0.1 + 0.2 }}
-                    className="absolute -top-1 left-1/2 -translate-x-1/2 w-3 h-3 bg-white border-2 border-primary-600 rounded-full"
+                    className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 bg-white border-2 border-primary-600 rounded-full z-0"
                   />
 
                   {/* Year badge */}
                   <motion.div
                     whileHover={{ scale: 1.1, rotate: 5 }}
-                    className="flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary-600 to-primary-700 text-white rounded-full font-bold text-lg shadow-lg border-4 border-white hover:shadow-xl transition-shadow duration-300"
+                    className="relative z-10 flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary-600 to-primary-700 text-white rounded-full font-bold text-lg shadow-lg border-4 border-white hover:shadow-xl transition-shadow duration-300"
                   >
                     {item.year.slice(-2)}
                   </motion.div>
@@ -102,37 +102,27 @@ export function Timeline({ items }: TimelineProps): JSX.Element {
               </div>
 
               {/* Mobile Layout (< md) */}
-              <div className="md:hidden flex gap-6">
-                {/* Year badge with connector dot on left */}
-                <div className="flex-shrink-0 relative">
-                  {/* Connector dot */}
+              <div className="md:hidden flex gap-6 items-start">
+                {/* Year badge with connector dot on timeline */}
+                <div className="flex-shrink-0 relative flex items-center">
+                  {/* Year badge */}
+                  <div className="relative z-10 flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary-600 to-primary-700 text-white rounded-full font-bold text-lg shadow-lg border-4 border-white">
+                    {item.year.slice(-2)}
+                  </div>
+
+                  {/* Connector dot on the timeline path */}
                   <motion.div
                     initial={{ scale: 0 }}
                     whileInView={{ scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.3, delay: index * 0.1 + 0.2 }}
-                    className="absolute -left-0.5 top-1/2 -translate-y-1/2 w-3 h-3 bg-white border-2 border-primary-600 rounded-full z-20"
+                    className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 bg-white border-2 border-primary-600 rounded-full z-20"
                   />
-
-                  <div className="relative z-10 flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary-600 to-primary-700 text-white rounded-full font-bold text-lg shadow-lg border-4 border-white">
-                    {item.year.slice(-2)}
-                  </div>
                 </div>
 
-                {/* Content on right */}
+                {/* Content card */}
                 <div className="flex-1">
-                  <motion.div
-                    whileHover={{ scale: 1.02 }}
-                    className="bg-white rounded-lg p-6 shadow-md border border-gray-200 hover:shadow-xl hover:border-primary-300 transition-all duration-300"
-                  >
-                    <div className="text-sm text-primary-600 font-semibold mb-2">
-                      {item.year}
-                    </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">
-                      {item.title}
-                    </h3>
-                    <p className="text-gray-600 leading-relaxed">{item.description}</p>
-                  </motion.div>
+                  <TimelineCard item={item} />
                 </div>
               </div>
             </motion.div>
