@@ -15,7 +15,8 @@ import {
   Menu,
   X,
   UserCog,
-  Settings
+  Settings,
+  Clock
 } from 'lucide-react';
 import { SITE_CONFIG } from '@/config/site.config';
 
@@ -44,6 +45,7 @@ const navigation: NavItem[] = [
   { name: 'Articles', href: '/admin/articles', icon: FileText, roles: ['super_admin', 'admin', 'kontributor'] },
   { name: 'Events', href: '/admin/events', icon: Calendar, roles: ['super_admin', 'admin', 'kontributor'] },
   { name: 'Leadership', href: '/admin/leadership', icon: Award, roles: ['super_admin', 'admin'] },
+  { name: 'Timeline', href: '/admin/timeline', icon: Clock, roles: ['super_admin', 'admin'] },
   { name: 'Users', href: '/admin/users', icon: UserCog, roles: ['super_admin'] },
   { name: 'Settings', href: '/admin/settings', icon: Settings, roles: ['super_admin', 'admin'] },
 ];
