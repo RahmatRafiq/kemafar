@@ -209,12 +209,12 @@ export function AboutContent({ data }: AboutContentProps): JSX.Element {
 
                         {/* Bottom fade gradient with dynamic scroll indicator */}
                         {showScrollIndicator && (
-                            <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white via-white/90 to-transparent pointer-events-none">
+                            <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white via-white/90 to-transparent pointer-events-none flex items-end justify-center pb-4">
                                 <motion.div
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, y: 10 }}
-                                    className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+                                    className="flex flex-col items-center gap-2"
                                 >
                                     <div className="text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Scroll untuk lebih lanjut
