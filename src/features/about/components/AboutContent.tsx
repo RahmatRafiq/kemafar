@@ -191,14 +191,18 @@ export function AboutContent({ data }: AboutContentProps): JSX.Element {
             {/* Timeline */}
             <Section className="py-24">
                 <div className="container-custom">
-                    <h2 className="text-3xl font-bold text-gray-900 mb-16 text-center">
-                        Perjalanan Kami
-                    </h2>
-                    {/* Scrollable container with dynamic scroll indicator */}
-                    <div className="relative">
+                    <div className="text-center mb-16">
+                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                            Perjalanan Kami
+                        </h2>
+                        <div className="w-24 h-1 bg-gradient-to-r from-primary-500 to-secondary-500 mx-auto rounded-full" />
+                    </div>
+
+                    {/* Scrollable container with max-width and centered */}
+                    <div className="relative max-w-5xl mx-auto">
                         <div
                             ref={scrollRef}
-                            className="max-h-[800px] overflow-y-auto scrollbar-thin pr-4"
+                            className="max-h-[800px] overflow-y-auto scrollbar-thin px-4"
                         >
                             <Timeline items={data.timeline} />
                         </div>
