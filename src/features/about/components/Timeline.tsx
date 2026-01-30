@@ -18,7 +18,7 @@ interface TimelineProps {
 }
 
 // Reusable Timeline Card Component
-function TimelineCard({ item }: { item: TimelineItem }) {
+function TimelineCard({ item }: { item: TimelineItem }): JSX.Element {
   return (
     <motion.div
       whileHover={{ y: -5, scale: 1.02 }}
@@ -35,7 +35,7 @@ function TimelineCard({ item }: { item: TimelineItem }) {
   );
 }
 
-export function Timeline({ items }: TimelineProps) {
+export function Timeline({ items }: TimelineProps): JSX.Element {
   return (
     <div className="relative">
       {/* Timeline line - centered on desktop, left on mobile */}
