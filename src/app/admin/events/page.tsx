@@ -21,7 +21,7 @@ interface EventListItem {
   status: Event['status'];
   start_date: string;
   end_date: string;
-  creator_id: string;
+  author_id: string;
   organizer: {
     name: string;
   };
@@ -67,12 +67,12 @@ export default function EventsPage() {
     deleteItem,
   } = useAdminTable<EventListItem>({
     tableName: 'events',
-    selectColumns: 'id, title, slug, category, status, start_date, end_date, creator_id, organizer',
+    selectColumns: 'id, title, slug, category, status, start_date, end_date, author_id, organizer',
     sortColumn: 'start_date',
     sortAscending: false,
     itemsPerPage: ITEMS_PER_PAGE,
     filterByAuthor: true,
-    authorColumn: 'creator_id',
+    authorColumn: 'author_id',
     searchColumns,
   });
 
@@ -97,7 +97,7 @@ export default function EventsPage() {
   const canEditEvent = useCallback((event: EventListItem): boolean => {
     if (hasPermission(['super_admin', 'admin'])) return true;
     if (profile?.role === 'kontributor' && user) {
-      return canEditOwnContent(event.creator_id);
+      return canEditOwnContent(event.author_id);
     }
     return false;
   }, [hasPermission, profile?.role, user, canEditOwnContent]);
@@ -105,7 +105,7 @@ export default function EventsPage() {
   const canDeleteEvent = useCallback((event: EventListItem): boolean => {
     if (hasPermission(['super_admin', 'admin'])) return true;
     if (profile?.role === 'kontributor' && user) {
-      return canEditOwnContent(event.creator_id);
+      return canEditOwnContent(event.author_id);
     }
     return false;
   }, [hasPermission, profile?.role, user, canEditOwnContent]);
@@ -119,10 +119,10 @@ export default function EventsPage() {
         title: 'Title',
         sortable: true,
         responsivePriority: 1,
-        render: (_: unknown, __: string, row: any) => (
+        render: (_: unknown, __: string, row: Record<string, unknown>) => (
           <div>
-            <div className="font-medium text-gray-900">{row.title}</div>
-            <div className="text-sm text-gray-500">{row.slug}</div>
+            <div className="font-medium text-gray-900">{(row as unknown as EventListItem).title}</div>
+            <div className="text-sm text-gray-500">{(row as unknown as EventListItem).slug}</div>
           </div>
         ),
       },
@@ -159,38 +159,41 @@ export default function EventsPage() {
         title: 'Actions',
         sortable: false,
         className: 'text-right',
-        render: (id: unknown, _: string, row: any) => (
-          <div className="flex items-center justify-end gap-2">
-            <Link
-              href={`/events/${row.slug}`}
-              target="_blank"
-              className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-              title="View"
-            >
-              <Eye className="w-4 h-4" />
-            </Link>
-
-            {canEditEvent(row as EventListItem) && (
+        render: (id: unknown, _: string, row: Record<string, unknown>) => {
+          const eventRow = row as unknown as EventListItem;
+          return (
+            <div className="flex items-center justify-end gap-2">
               <Link
-                href={`/admin/events/${id}`}
+                href={`/events/${eventRow.slug}`}
+                target="_blank"
                 className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                title="Edit"
+                title="View"
               >
-                <Edit className="w-4 h-4" />
+                <Eye className="w-4 h-4" />
               </Link>
-            )}
 
-            {canDeleteEvent(row as EventListItem) && (
-              <button
-                onClick={() => handleDelete(id as string, row.title)}
-                className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                title="Delete"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
-            )}
-          </div>
-        ),
+              {canEditEvent(eventRow) && (
+                <Link
+                  href={`/admin/events/${id}`}
+                  className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                  title="Edit"
+                >
+                  <Edit className="w-4 h-4" />
+                </Link>
+              )}
+
+              {canDeleteEvent(eventRow) && (
+                <button
+                  onClick={() => handleDelete(id as string, eventRow.title)}
+                  className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                  title="Delete"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+          );
+        },
       },
     ],
     pageLength: ITEMS_PER_PAGE,

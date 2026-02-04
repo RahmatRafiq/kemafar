@@ -58,6 +58,7 @@ export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState<TabType>('home');
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   // Home settings state
   const [homeSettings, setHomeSettings] = useState<HomeSettings | null>(null);
@@ -76,28 +77,30 @@ export default function SettingsPage() {
   async function fetchSettings() {
     setFetching(true);
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        toast.error('Not authenticated');
-        return;
-      }
+      // Direct query to Supabase - no API route needed
+      const { data, error } = await supabase
+        .from('site_settings')
+        .select('*')
+        .order('key', { ascending: true });
 
-      const response = await fetch('/api/admin/settings', {
-        headers: { 'Authorization': `Bearer ${session.access_token}` },
-      });
+      if (error) throw error;
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch settings');
-      }
-
-      const data = await response.json();
+      // Type the data
+      const settings = data as Array<{
+        key: string;
+        content: HomeSettings | AboutSettings;
+      }>;
 
       // Find home and about settings from database
-      const homeData = data.find((s: { key: string }) => s.key === 'home');
-      const aboutData = data.find((s: { key: string }) => s.key === 'about');
+      const homeData = settings?.find(s => s.key === 'home');
+      const aboutData = settings?.find(s => s.key === 'about');
 
-      if (homeData) setHomeSettings(homeData.content);
-      if (aboutData) setAboutSettings(aboutData.content);
+      // Set state with new data
+      if (homeData) setHomeSettings(homeData.content as HomeSettings);
+      if (aboutData) setAboutSettings(aboutData.content as AboutSettings);
+
+      // Force component re-mount by changing key
+      setRefreshKey(prev => prev + 1);
     } catch (error) {
       console.error('Error fetching settings:', error);
       toast.error('Failed to load settings');
@@ -111,27 +114,30 @@ export default function SettingsPage() {
 
     setLoading(true);
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
         toast.error('Not authenticated');
         return;
       }
 
-      const response = await fetch('/api/admin/settings/home', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`,
-        },
-        body: JSON.stringify(homeSettings),
-      });
+      // Direct upsert to Supabase
+      const { error } = await supabase
+        .from('site_settings')
+        .upsert({
+          key: 'home',
+          content: homeSettings as unknown as Record<string, unknown>,
+          updated_by: user.id,
+          updated_at: new Date().toISOString(),
+        } as never, {
+          onConflict: 'key'
+        });
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to save settings');
-      }
+      if (error) throw error;
 
       toast.success('Home settings saved successfully');
+
+      // Refetch to sync UI with database
+      await fetchSettings();
     } catch (error) {
       console.error('Error saving home settings:', error);
       toast.error(error instanceof Error ? error.message : 'Failed to save settings');
@@ -145,27 +151,30 @@ export default function SettingsPage() {
 
     setLoading(true);
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
         toast.error('Not authenticated');
         return;
       }
 
-      const response = await fetch('/api/admin/settings/about', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`,
-        },
-        body: JSON.stringify(aboutSettings),
-      });
+      // Direct upsert to Supabase
+      const { error } = await supabase
+        .from('site_settings')
+        .upsert({
+          key: 'about',
+          content: aboutSettings as unknown as Record<string, unknown>,
+          updated_by: user.id,
+          updated_at: new Date().toISOString(),
+        } as never, {
+          onConflict: 'key'
+        });
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to save settings');
-      }
+      if (error) throw error;
 
       toast.success('About settings saved successfully');
+
+      // Refetch to sync UI with database
+      await fetchSettings();
     } catch (error) {
       console.error('Error saving about settings:', error);
       toast.error(error instanceof Error ? error.message : 'Failed to save settings');
@@ -224,7 +233,7 @@ export default function SettingsPage() {
 
       {/* Home Tab Content */}
       {activeTab === 'home' && homeSettings && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div key={`home-${refreshKey}`} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
           <div className="space-y-6">
             <h2 className="text-xl font-bold text-gray-900">Home Page Content</h2>
 
