@@ -77,37 +77,27 @@ export default function SettingsPage() {
   async function fetchSettings() {
     setFetching(true);
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        toast.error('Not authenticated');
-        return;
-      }
+      // Direct query to Supabase - no API route needed
+      const { data, error } = await supabase
+        .from('site_settings')
+        .select('*')
+        .order('key', { ascending: true });
 
-      // Add timestamp to URL to bust any caching
-      const timestamp = new Date().getTime();
-      const response = await fetch(`/api/admin/settings?_t=${timestamp}`, {
-        headers: {
-          'Authorization': `Bearer ${session.access_token}`,
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache',
-        },
-        cache: 'no-store', // Disable browser caching - always fetch fresh
-      });
+      if (error) throw error;
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch settings');
-      }
-
-      const data = await response.json();
+      // Type the data
+      const settings = data as Array<{
+        key: string;
+        content: HomeSettings | AboutSettings;
+      }>;
 
       // Find home and about settings from database
-      const homeData = data.find((s: { key: string }) => s.key === 'home');
-      const aboutData = data.find((s: { key: string }) => s.key === 'about');
+      const homeData = settings?.find(s => s.key === 'home');
+      const aboutData = settings?.find(s => s.key === 'about');
 
-      // Force new object reference to trigger React re-render
-      // Use JSON parse/stringify for deep clone to ensure all nested objects are new references
-      if (homeData) setHomeSettings(JSON.parse(JSON.stringify(homeData.content)));
-      if (aboutData) setAboutSettings(JSON.parse(JSON.stringify(aboutData.content)));
+      // Set state with new data
+      if (homeData) setHomeSettings(homeData.content as HomeSettings);
+      if (aboutData) setAboutSettings(aboutData.content as AboutSettings);
 
       // Force component re-mount by changing key
       setRefreshKey(prev => prev + 1);
@@ -124,31 +114,27 @@ export default function SettingsPage() {
 
     setLoading(true);
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
         toast.error('Not authenticated');
         return;
       }
 
-      const response = await fetch('/api/admin/settings/home', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`,
-        },
-        body: JSON.stringify(homeSettings),
-        cache: 'no-store', // Disable browser caching
-      });
+      // Direct upsert to Supabase
+      const { error } = await supabase
+        .from('site_settings')
+        .upsert({
+          key: 'home',
+          content: homeSettings as unknown as Record<string, unknown>,
+          updated_by: user.id,
+          updated_at: new Date().toISOString(),
+        } as never, {
+          onConflict: 'key'
+        });
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to save settings');
-      }
+      if (error) throw error;
 
       toast.success('Home settings saved successfully');
-
-      // Add small delay to ensure DB has committed
-      await new Promise(resolve => setTimeout(resolve, 500));
 
       // Refetch to sync UI with database
       await fetchSettings();
@@ -165,31 +151,27 @@ export default function SettingsPage() {
 
     setLoading(true);
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
         toast.error('Not authenticated');
         return;
       }
 
-      const response = await fetch('/api/admin/settings/about', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`,
-        },
-        body: JSON.stringify(aboutSettings),
-        cache: 'no-store', // Disable browser caching
-      });
+      // Direct upsert to Supabase
+      const { error } = await supabase
+        .from('site_settings')
+        .upsert({
+          key: 'about',
+          content: aboutSettings as unknown as Record<string, unknown>,
+          updated_by: user.id,
+          updated_at: new Date().toISOString(),
+        } as never, {
+          onConflict: 'key'
+        });
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to save settings');
-      }
+      if (error) throw error;
 
       toast.success('About settings saved successfully');
-
-      // Add small delay to ensure DB has committed
-      await new Promise(resolve => setTimeout(resolve, 500));
 
       // Refetch to sync UI with database
       await fetchSettings();
