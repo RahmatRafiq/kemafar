@@ -58,6 +58,7 @@ export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState<TabType>('home');
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   // Home settings state
   const [homeSettings, setHomeSettings] = useState<HomeSettings | null>(null);
@@ -82,8 +83,15 @@ export default function SettingsPage() {
         return;
       }
 
-      const response = await fetch('/api/admin/settings', {
-        headers: { 'Authorization': `Bearer ${session.access_token}` },
+      // Add timestamp to URL to bust any caching
+      const timestamp = new Date().getTime();
+      const response = await fetch(`/api/admin/settings?_t=${timestamp}`, {
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`,
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache',
+        },
+        cache: 'no-store', // Disable browser caching - always fetch fresh
       });
 
       if (!response.ok) {
@@ -96,8 +104,13 @@ export default function SettingsPage() {
       const homeData = data.find((s: { key: string }) => s.key === 'home');
       const aboutData = data.find((s: { key: string }) => s.key === 'about');
 
-      if (homeData) setHomeSettings(homeData.content);
-      if (aboutData) setAboutSettings(aboutData.content);
+      // Force new object reference to trigger React re-render
+      // Use JSON parse/stringify for deep clone to ensure all nested objects are new references
+      if (homeData) setHomeSettings(JSON.parse(JSON.stringify(homeData.content)));
+      if (aboutData) setAboutSettings(JSON.parse(JSON.stringify(aboutData.content)));
+
+      // Force component re-mount by changing key
+      setRefreshKey(prev => prev + 1);
     } catch (error) {
       console.error('Error fetching settings:', error);
       toast.error('Failed to load settings');
@@ -124,6 +137,7 @@ export default function SettingsPage() {
           'Authorization': `Bearer ${session.access_token}`,
         },
         body: JSON.stringify(homeSettings),
+        cache: 'no-store', // Disable browser caching
       });
 
       if (!response.ok) {
@@ -132,6 +146,12 @@ export default function SettingsPage() {
       }
 
       toast.success('Home settings saved successfully');
+
+      // Add small delay to ensure DB has committed
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      // Refetch to sync UI with database
+      await fetchSettings();
     } catch (error) {
       console.error('Error saving home settings:', error);
       toast.error(error instanceof Error ? error.message : 'Failed to save settings');
@@ -158,6 +178,7 @@ export default function SettingsPage() {
           'Authorization': `Bearer ${session.access_token}`,
         },
         body: JSON.stringify(aboutSettings),
+        cache: 'no-store', // Disable browser caching
       });
 
       if (!response.ok) {
@@ -166,6 +187,12 @@ export default function SettingsPage() {
       }
 
       toast.success('About settings saved successfully');
+
+      // Add small delay to ensure DB has committed
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      // Refetch to sync UI with database
+      await fetchSettings();
     } catch (error) {
       console.error('Error saving about settings:', error);
       toast.error(error instanceof Error ? error.message : 'Failed to save settings');
@@ -224,7 +251,7 @@ export default function SettingsPage() {
 
       {/* Home Tab Content */}
       {activeTab === 'home' && homeSettings && (
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div key={`home-${refreshKey}`} className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
           <div className="space-y-6">
             <h2 className="text-xl font-bold text-gray-900">Home Page Content</h2>
 

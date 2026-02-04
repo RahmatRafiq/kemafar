@@ -7,6 +7,9 @@ import { Metadata } from 'next';
 import { AboutContent } from '@/features/about/components/AboutContent';
 import { getAboutSettings } from '@/lib/api/settings';
 
+// Force dynamic rendering - no static generation
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Tentang Kami',
   description: 'Pelajari lebih lanjut tentang organisasi kami, misi, dan visi kami',

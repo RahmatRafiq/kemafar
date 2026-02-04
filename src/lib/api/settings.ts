@@ -1,3 +1,4 @@
+import { unstable_noStore as noStore } from 'next/cache';
 import { supabase } from '@/lib/supabase/client';
 import { HOME_CONTENT, ABOUT_CONTENT, HomeSettings, AboutSettings } from '@/config';
 import { getTimeline } from './timeline';
@@ -18,6 +19,9 @@ interface SiteSettingsRaw {
  * Fetch home settings from database with fallback to config
  */
 export async function getHomeSettings(): Promise<HomeSettings> {
+  // Disable Next.js caching - always fetch fresh data
+  noStore();
+
   // Check if we should use database for settings
   const useSupabaseSettings = process.env.NEXT_PUBLIC_USE_SUPABASE_SETTINGS === 'true';
 
@@ -46,6 +50,9 @@ export async function getHomeSettings(): Promise<HomeSettings> {
  * Fetch about settings from database with fallback to config
  */
 export async function getAboutSettings(): Promise<AboutSettings> {
+  // Disable Next.js caching - always fetch fresh data
+  noStore();
+
   // Check if we should use database for settings
   const useSupabaseSettings = process.env.NEXT_PUBLIC_USE_SUPABASE_SETTINGS === 'true';
   const useSupabaseTimeline = process.env.NEXT_PUBLIC_USE_SUPABASE_TIMELINE === 'true';

@@ -56,13 +56,14 @@ export async function PUT(request: NextRequest): Promise<NextResponse> {
     }
 
     // Upsert settings in database (INSERT if not exists, UPDATE if exists)
+    const now = new Date().toISOString();
     const { error: upsertError } = await supabaseAdmin
       .from('site_settings')
       .upsert({
         key: 'home',
         content: body,
         updated_by: user.id,
-        updated_at: new Date().toISOString(),
+        updated_at: now,
       }, {
         onConflict: 'key'
       });

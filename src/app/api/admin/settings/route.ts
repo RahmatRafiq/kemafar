@@ -46,9 +46,12 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     }
 
     // Fetch all settings
+    // Add timestamp comparison to force fresh query (bypasses prepared statement cache)
+    const now = new Date().toISOString();
     const { data, error } = await supabaseAdmin
       .from('site_settings')
       .select('*')
+      .or(`updated_at.lte.${now},updated_at.is.null`)
       .order('key', { ascending: true });
 
     if (error) {
@@ -59,7 +62,14 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    return NextResponse.json(data);
+    // Return with aggressive cache-busting headers
+    return NextResponse.json(data, {
+      headers: {
+        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0',
+        'Pragma': 'no-cache',
+        'Expires': '0',
+      }
+    });
   } catch (error) {
     console.error('Error in GET /api/admin/settings:', error);
     return NextResponse.json(
