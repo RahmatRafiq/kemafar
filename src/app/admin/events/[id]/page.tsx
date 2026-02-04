@@ -83,6 +83,14 @@ export default function EventFormPage() {
         name: data.organizer_name,
       };
 
+      // Handle tags - can be array or string
+      let formattedTags: string[] | null = null;
+      if (Array.isArray(data.tags)) {
+        formattedTags = data.tags;
+      } else if (typeof data.tags === 'string' && data.tags) {
+        formattedTags = data.tags.split(',').map((t) => t.trim());
+      }
+
       return {
         title: data.title,
         slug: data.slug,
@@ -100,7 +108,7 @@ export default function EventFormPage() {
           ? new Date(data.registration_deadline).toISOString()
           : null,
         max_participants: data.max_participants ? parseInt(data.max_participants) : null,
-        tags: data.tags ? data.tags.split(',').map((t) => t.trim()) : null,
+        tags: formattedTags,
         featured: data.featured,
         current_participants: 0,
       };

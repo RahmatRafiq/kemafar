@@ -38,7 +38,7 @@ export interface Event {
   start_date: string;
   end_date: string;
   organizer: EventOrganizer | null;
-  creator_id: string;
+  author_id: string;
   registration_url: string | null;
   registration_deadline: string | null;
   max_participants: number | null;
@@ -53,6 +53,6 @@ export interface Event {
 
 /**
  * Event update data type
- * Omits id, creator_id, current_participants, views, created_at, updated_at which are managed by the database
+ * Omits id, author_id, current_participants, views, created_at, updated_at which are managed by the database
  */
-export type EventUpdateData = Omit<Event, 'id' | 'creator_id' | 'current_participants' | 'views' | 'created_at' | 'updated_at'>;
+export type EventUpdateData = Omit<Event, 'id' | 'author_id' | 'current_participants' | 'views' | 'created_at' | 'updated_at'>;
