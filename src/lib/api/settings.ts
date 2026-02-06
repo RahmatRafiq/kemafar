@@ -1,5 +1,5 @@
 import { unstable_noStore as noStore } from 'next/cache';
-import { supabase } from '@/lib/supabase/client';
+import { createServerSupabase } from '@/lib/supabase/server';
 import { HOME_CONTENT, ABOUT_CONTENT, HomeSettings, AboutSettings } from '@/config';
 import { getTimeline } from './timeline';
 
@@ -31,6 +31,7 @@ export async function getHomeSettings(): Promise<HomeSettings> {
   }
 
   // Fetch from database
+  const supabase = createServerSupabase();
   const { data, error } = await supabase
     .from('site_settings')
     .select('*')
@@ -62,6 +63,7 @@ export async function getAboutSettings(): Promise<AboutSettings> {
 
   if (useSupabaseSettings) {
     // Fetch settings from site_settings table
+    const supabase = createServerSupabase();
     const { data, error } = await supabase
       .from('site_settings')
       .select('*')

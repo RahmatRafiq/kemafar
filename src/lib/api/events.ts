@@ -2,7 +2,7 @@
  * Events API - Simplified data fetching
  */
 
-import { supabase } from '@/lib/supabase/client';
+import { createServerSupabase } from '@/lib/supabase/server';
 
 export type EventStatus = 'upcoming' | 'ongoing' | 'completed' | 'cancelled';
 export type EventCategory = 'seminar' | 'workshop' | 'community-service' | 'competition' | 'training' | 'other';
@@ -165,6 +165,8 @@ function transformEvent(raw: EventRaw): Event {
  * Get all events
  */
 export async function getEvents(): Promise<Event[]> {
+  const supabase = createServerSupabase();
+  
   const { data, error } = await supabase
     .from('events')
     .select('*')
@@ -182,6 +184,8 @@ export async function getEvents(): Promise<Event[]> {
  * Get event by slug
  */
 export async function getEventBySlug(slug: string): Promise<Event | null> {
+  const supabase = createServerSupabase();
+  
   const { data, error } = await supabase
     .from('events')
     .select('*')
@@ -203,6 +207,8 @@ export async function getEventBySlug(slug: string): Promise<Event | null> {
  * Get events by status
  */
 export async function getEventsByStatus(status: EventStatus): Promise<Event[]> {
+  const supabase = createServerSupabase();
+  
   const { data, error } = await supabase
     .from('events')
     .select('*')
@@ -221,6 +227,8 @@ export async function getEventsByStatus(status: EventStatus): Promise<Event[]> {
  * Get events by category
  */
 export async function getEventsByCategory(category: EventCategory): Promise<Event[]> {
+  const supabase = createServerSupabase();
+  
   const { data, error } = await supabase
     .from('events')
     .select('*')
@@ -239,6 +247,8 @@ export async function getEventsByCategory(category: EventCategory): Promise<Even
  * Get upcoming events
  */
 export async function getUpcomingEvents(limit?: number): Promise<Event[]> {
+  const supabase = createServerSupabase();
+  
   let query = supabase
     .from('events')
     .select('*')
@@ -264,6 +274,8 @@ export async function getUpcomingEvents(limit?: number): Promise<Event[]> {
  * Get recent events
  */
 export async function getRecentEvents(limit: number = 6): Promise<Event[]> {
+  const supabase = createServerSupabase();
+  
   const { data, error } = await supabase
     .from('events')
     .select('*')
@@ -286,6 +298,7 @@ export async function getPaginatedEvents(
   limit: number,
   category?: EventCategory
 ): Promise<PaginatedResult<Event>> {
+  const supabase = createServerSupabase();
   const from = (page - 1) * limit;
   const to = from + limit - 1;
 

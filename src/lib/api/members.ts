@@ -3,7 +3,7 @@
  * Members are alumni who served in leadership positions
  */
 
-import { supabase } from '@/lib/supabase/client';
+import { createServerSupabase } from '@/lib/supabase/server';
 import type { Member, PositionHistory, LeadershipRaw } from '@/types/member';
 
 /**
@@ -70,6 +70,7 @@ async function groupLeadershipByNIM(records: LeadershipRaw[]): Promise<Member[]>
  * Filters: period_end < today AND nim IS NOT NULL
  */
 export async function getMembers(): Promise<Member[]> {
+  const supabase = createServerSupabase();
   const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
 
   const { data, error } = await supabase
@@ -96,6 +97,7 @@ export async function getMembers(): Promise<Member[]> {
  * Get member by NIM
  */
 export async function getMemberByNIM(nim: string): Promise<Member | null> {
+  const supabase = createServerSupabase();
   const today = new Date().toISOString().split('T')[0];
 
   const { data, error } = await supabase
@@ -122,6 +124,7 @@ export async function getMemberByNIM(nim: string): Promise<Member | null> {
  * Get members by batch
  */
 export async function getMembersByBatch(batch: string): Promise<Member[]> {
+  const supabase = createServerSupabase();
   const today = new Date().toISOString().split('T')[0];
 
   const { data, error } = await supabase
@@ -144,6 +147,7 @@ export async function getMembersByBatch(batch: string): Promise<Member[]> {
  * Get members who served in a specific division
  */
 export async function getMembersByDivision(division: string): Promise<Member[]> {
+  const supabase = createServerSupabase();
   const today = new Date().toISOString().split('T')[0];
 
   const { data, error } = await supabase
@@ -166,6 +170,7 @@ export async function getMembersByDivision(division: string): Promise<Member[]> 
  * Get unique batches from members
  */
 export async function getMemberBatches(): Promise<string[]> {
+  const supabase = createServerSupabase();
   const today = new Date().toISOString().split('T')[0];
 
   const { data, error} = await supabase

@@ -3,7 +3,7 @@
  * Functions for managing organization timeline/history items
  */
 
-import { supabase } from '@/lib/supabase/client';
+import { createServerSupabase } from '@/lib/supabase/server';
 import type { TimelineFormData } from '@/types/forms';
 
 export interface TimelineItem {
@@ -21,6 +21,8 @@ export interface TimelineItem {
  * Fetch all timeline items, sorted by year descending
  */
 export async function getTimeline(): Promise<TimelineItem[]> {
+  const supabase = createServerSupabase();
+  
   const { data, error } = await supabase
     .from('organization_timeline')
     .select('*')
@@ -38,6 +40,8 @@ export async function getTimeline(): Promise<TimelineItem[]> {
  * Fetch a single timeline item by ID
  */
 export async function getTimelineById(id: string): Promise<TimelineItem | null> {
+  const supabase = createServerSupabase();
+  
   const { data, error } = await supabase
     .from('organization_timeline')
     .select('*')
@@ -60,6 +64,7 @@ export async function getTimelineById(id: string): Promise<TimelineItem | null> 
  * Create a new timeline item
  */
 export async function createTimeline(data: TimelineFormData): Promise<TimelineItem> {
+  const supabase = createServerSupabase();
   const insertData = {
     year: data.year,
     title: data.title,
@@ -88,6 +93,7 @@ export async function updateTimeline(
   id: string,
   data: TimelineFormData
 ): Promise<TimelineItem> {
+  const supabase = createServerSupabase();
   const updateData = {
     year: data.year,
     title: data.title,
@@ -115,6 +121,8 @@ export async function updateTimeline(
  * Delete a timeline item
  */
 export async function deleteTimeline(id: string): Promise<void> {
+  const supabase = createServerSupabase();
+  
   const { error } = await supabase
     .from('organization_timeline')
     .delete()

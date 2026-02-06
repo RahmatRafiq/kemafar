@@ -104,3 +104,93 @@ const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
 export const supabaseServer = supabaseUrl && supabaseServiceKey
   ? createClient<Database>(supabaseUrl, supabaseServiceKey)
   : null;
+
+/**
+ * Create a fresh Supabase client for server-side requests (respects RLS)
+ *
+ * This function creates a NEW client instance on each call, ensuring that
+ * environment variables are read fresh from process.env on every request.
+ * This prevents caching issues on platforms like Vercel where env vars
+ * might be different at build time vs runtime.
+ *
+ * @remarks
+ * **Why use this instead of the singleton client?**
+ * - ✅ Reads env vars fresh on EACH request (no build-time caching)
+ * - ✅ Works correctly when env vars change on Vercel/production
+ * - ✅ Still respects RLS policies (uses anon key, not service role)
+ * - ✅ Prevents stale data issues between environments
+ *
+ * **When to Use:**
+ * - ✅ API routes (app/api/...)
+ * - ✅ Server Actions
+ * - ✅ Server Components that need data fetching
+ * - ✅ Any server-side code that queries Supabase
+ * - ❌ NEVER in client components (use client.ts instead)
+ *
+ * **Performance:**
+ * Creating a new client is lightweight - it only creates a JS object
+ * and doesn't establish any persistent connections. The overhead is
+ * negligible compared to network requests.
+ *
+ * @example
+ * ```ts
+ * // API Route
+ * import { createServerSupabase } from '@/lib/supabase/server';
+ *
+ * export async function GET() {
+ *   const supabase = createServerSupabase();
+ *
+ *   const { data, error } = await supabase
+ *     .from('articles')
+ *     .select('*')
+ *     .eq('status', 'published');
+ *
+ *   return Response.json(data);
+ * }
+ * ```
+ *
+ * @example
+ * ```ts
+ * // In a lib/api file
+ * import { createServerSupabase } from '@/lib/supabase/server';
+ *
+ * export async function getArticles() {
+ *   const supabase = createServerSupabase();
+ *   const { data } = await supabase.from('articles').select('*');
+ *   return data;
+ * }
+ * ```
+ *
+ * @returns A fresh Supabase client instance with anon key (respects RLS)
+ */
+export function createServerSupabase() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!url || !key) {
+    throw new Error(
+      'Missing Supabase environment variables. ' +
+      'Please set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY'
+    );
+  }
+
+  return createClient<Database>(url, key, {
+    auth: {
+      // Don't persist sessions on server-side
+      persistSession: false,
+      // Don't try to auto-refresh tokens
+      autoRefreshToken: false,
+      // Don't detect session in URL
+      detectSessionInUrl: false,
+    },
+    global: {
+      // Force no caching on fetch requests
+      fetch: (url, options = {}) => {
+        return fetch(url, {
+          ...options,
+          cache: 'no-store',
+        });
+      },
+    },
+  });
+}

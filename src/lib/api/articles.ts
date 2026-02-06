@@ -5,7 +5,7 @@
  * Uses database types directly (no conversion needed).
  */
 
-import { supabase } from '@/lib/supabase/client';
+import { createServerSupabase } from '@/lib/supabase/server';
 
 /**
  * Article category type matching database enum
@@ -109,6 +109,8 @@ export interface PaginatedResult<T> {
  * Get all published articles
  */
 export async function getArticles(): Promise<Article[]> {
+  const supabase = createServerSupabase();
+  
   const { data, error } = await supabase
     .from('articles')
     .select('*')
@@ -127,6 +129,8 @@ export async function getArticles(): Promise<Article[]> {
  * Get article by slug
  */
 export async function getArticleBySlug(slug: string): Promise<Article | null> {
+  const supabase = createServerSupabase();
+  
   const { data, error } = await supabase
     .from('articles')
     .select('*')
@@ -149,6 +153,8 @@ export async function getArticleBySlug(slug: string): Promise<Article | null> {
  * Get articles by category
  */
 export async function getArticlesByCategory(category: ArticleCategory): Promise<Article[]> {
+  const supabase = createServerSupabase();
+  
   const { data, error } = await supabase
     .from('articles')
     .select('*')
@@ -172,6 +178,7 @@ export async function getPaginatedArticles(
   limit: number,
   category?: ArticleCategory
 ): Promise<PaginatedResult<Article>> {
+  const supabase = createServerSupabase();
   const from = (page - 1) * limit;
   const to = from + limit - 1;
 
@@ -209,6 +216,8 @@ export async function getPaginatedArticles(
  * Get featured articles
  */
 export async function getFeaturedArticles(limit: number = 3): Promise<Article[]> {
+  const supabase = createServerSupabase();
+  
   const { data, error } = await supabase
     .from('articles')
     .select('*')
@@ -229,6 +238,8 @@ export async function getFeaturedArticles(limit: number = 3): Promise<Article[]>
  * Get recent articles
  */
 export async function getRecentArticles(limit: number = 5): Promise<Article[]> {
+  const supabase = createServerSupabase();
+  
   const { data, error } = await supabase
     .from('articles')
     .select('*')
@@ -248,6 +259,8 @@ export async function getRecentArticles(limit: number = 5): Promise<Article[]> {
  * Get related articles based on category
  */
 export async function getRelatedArticles(articleId: string, limit: number = 3): Promise<Article[]> {
+  const supabase = createServerSupabase();
+  
   // First, get the current article's category
   const { data: currentArticle, error: currentError } = await supabase
     .from('articles')
@@ -282,6 +295,7 @@ export async function getRelatedArticles(articleId: string, limit: number = 3): 
  * Search articles by query
  */
 export async function searchArticles(query: string): Promise<Article[]> {
+  const supabase = createServerSupabase();
   const lowerQuery = query.toLowerCase();
 
   const { data, error } = await supabase

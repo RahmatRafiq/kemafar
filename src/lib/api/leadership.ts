@@ -2,7 +2,7 @@
  * Leadership API - Simplified data fetching
  */
 
-import { supabase } from '@/lib/supabase/client';
+import { createServerSupabase } from '@/lib/supabase/server';
 
 /**
  * Social media JSONB structure
@@ -103,6 +103,8 @@ function transformLeadership(raw: LeadershipRaw): LeadershipMember {
  * Get all leadership members
  */
 export async function getLeadership(): Promise<LeadershipMember[]> {
+  const supabase = createServerSupabase();
+  
   const { data, error } = await supabase
     .from('leadership')
     .select('*')
@@ -120,6 +122,7 @@ export async function getLeadership(): Promise<LeadershipMember[]> {
  * Get active leadership (current period)
  */
 export async function getActiveLeadership(): Promise<LeadershipMember[]> {
+  const supabase = createServerSupabase();
   const now = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
 
   const { data, error } = await supabase
@@ -141,6 +144,8 @@ export async function getActiveLeadership(): Promise<LeadershipMember[]> {
  * Get leadership by period year (e.g., "2024")
  */
 export async function getLeadershipByPeriod(year: string): Promise<LeadershipMember[]> {
+  const supabase = createServerSupabase();
+  
   const { data, error } = await supabase
     .from('leadership')
     .select('*')
@@ -160,6 +165,7 @@ export async function getLeadershipByPeriod(year: string): Promise<LeadershipMem
  * Get leadership by division
  */
 export async function getLeadershipByDivision(division: string): Promise<LeadershipMember[]> {
+  const supabase = createServerSupabase();
   const now = new Date().toISOString().split('T')[0];
 
   const { data, error } = await supabase
@@ -182,6 +188,8 @@ export async function getLeadershipByDivision(division: string): Promise<Leaders
  * Get leadership member by ID
  */
 export async function getLeadershipById(id: string): Promise<LeadershipMember | null> {
+  const supabase = createServerSupabase();
+  
   const { data, error } = await supabase
     .from('leadership')
     .select('*')
