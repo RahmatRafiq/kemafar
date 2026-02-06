@@ -2,7 +2,6 @@ import { Metadata } from 'next';
 import { Suspense } from 'react';
 import { EventsPageClient } from '@/features/events/components/EventsPageClient';
 
-// Force dynamic rendering - prevent static generation
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
