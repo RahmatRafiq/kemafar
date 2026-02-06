@@ -2,6 +2,9 @@ import { Metadata } from 'next';
 import { Suspense } from 'react';
 import { ArticlesPageClient } from '@/features/articles/components/ArticlesPageClient';
 
+// Force dynamic rendering - prevent static generation
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Artikel',
   description: 'Koleksi artikel, blog, opini, publikasi, dan informasi terbaru',
