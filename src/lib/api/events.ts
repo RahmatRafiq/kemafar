@@ -8,6 +8,18 @@ export type EventStatus = 'upcoming' | 'ongoing' | 'completed' | 'cancelled';
 export type EventCategory = 'seminar' | 'workshop' | 'community-service' | 'competition' | 'training' | 'other';
 
 /**
+ * Pagination result wrapper
+ */
+export interface PaginatedResult<T> {
+  items: T[];
+  totalCount: number;
+  totalPages: number;
+  currentPage: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+}
+
+/**
  * Location JSONB structure from database
  */
 interface LocationRaw {
@@ -264,4 +276,45 @@ export async function getRecentEvents(limit: number = 6): Promise<Event[]> {
   }
 
   return (data || []).map(transformEvent);
+}
+
+/**
+ * Get paginated events
+ */
+export async function getPaginatedEvents(
+  page: number,
+  limit: number,
+  category?: EventCategory
+): Promise<PaginatedResult<Event>> {
+  const from = (page - 1) * limit;
+  const to = from + limit - 1;
+
+  let query = supabase
+    .from('events')
+    .select('*', { count: 'exact' })
+    .order('start_date', { ascending: false })
+    .range(from, to);
+
+  if (category) {
+    query = query.eq('category', category);
+  }
+
+  const { data, error, count } = await query;
+
+  if (error) {
+    console.error('Error fetching paginated events:', error);
+    throw new Error('Failed to fetch paginated events');
+  }
+
+  const totalCount = count || 0;
+  const totalPages = Math.ceil(totalCount / limit);
+
+  return {
+    items: (data || []).map(transformEvent),
+    totalCount,
+    totalPages,
+    currentPage: page,
+    hasNextPage: page < totalPages,
+    hasPrevPage: page > 1,
+  };
 }
