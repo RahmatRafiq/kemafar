@@ -253,7 +253,6 @@ export default function EventFormPage() {
               return res.url!;
             })}
             accept="image/*"
-            required
           />
 
           <div>

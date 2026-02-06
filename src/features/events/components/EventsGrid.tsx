@@ -27,7 +27,7 @@ export function EventsGrid({ events, statusColors, statusLabels }: EventsGridPro
   }
 
   // Simplified animations for better mobile performance
-  const cardVariants = shouldReduceMotion ? {} : {
+  const cardVariants = shouldReduceMotion ? undefined : {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
   };
@@ -37,8 +37,8 @@ export function EventsGrid({ events, statusColors, statusLabels }: EventsGridPro
       {events.map((event, index) => (
         <motion.div
           key={event.id}
-          initial="hidden"
-          whileInView="visible"
+          initial={shouldReduceMotion ? false : "hidden"}
+          whileInView={shouldReduceMotion ? undefined : "visible"}
           viewport={{ once: true, margin: "-50px" }}
           variants={cardVariants}
           transition={{
