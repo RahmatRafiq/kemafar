@@ -504,11 +504,15 @@ async function scrapeAllArticles() {
  * Generate SQL INSERT statements
  */
 function generateSQLInserts(articles: Article[]): string {
+  // HMJ Farmasi UINAM author ID from profiles table
+  const AUTHOR_ID = '16bc2e11-06d0-48cd-a720-4634bbf14783';
+
   let sql = `-- =============================================
 -- ARTICLES FROM KEMAFAR.ORG
 -- Auto-generated with Supabase Storage Integration
 -- Total: ${articles.length} articles
 -- Images uploaded to: ${bucketName}
+-- Author: HMJ Farmasi UINAM (${AUTHOR_ID})
 -- Generated: ${new Date().toISOString()}
 -- =============================================
 
@@ -516,15 +520,15 @@ function generateSQLInserts(articles: Article[]): string {
 
   articles.forEach((article, index) => {
     const authorJson = JSON.stringify({
-      name: 'Admin KEMAFAR',
+      name: 'HMJ Farmasi UINAM',
       role: 'admin',
-      email: 'admin@kemafar.org'
+      email: 'hmjfarmasiuinam@gmail.com'
     }).replace(/'/g, "''");
 
     const tagsArray = `ARRAY[${article.tags.map(t => `'${t}'`).join(', ')}]`;
 
     sql += `-- Article ${index + 1}: ${article.title}\n`;
-    sql += `INSERT INTO public.articles (title, slug, excerpt, content, category, status, cover_image, published_at, author, tags, featured)\n`;
+    sql += `INSERT INTO public.articles (title, slug, excerpt, content, category, status, cover_image, published_at, author, author_id, tags, featured)\n`;
     sql += `VALUES (\n`;
     sql += `  '${article.title.replace(/'/g, "''")}',\n`;
     sql += `  '${article.slug}',\n`;
@@ -535,6 +539,7 @@ function generateSQLInserts(articles: Article[]): string {
     sql += `  '${article.coverImage}',\n`;
     sql += `  '${article.publishedAt}',\n`;
     sql += `  '${authorJson}'::jsonb,\n`;
+    sql += `  '${AUTHOR_ID}'::uuid,\n`;
     sql += `  ${tagsArray},\n`;
     sql += `  ${index < 5 ? 'true' : 'false'}\n`; // First 5 articles featured
     sql += `)\n`;
@@ -542,7 +547,8 @@ function generateSQLInserts(articles: Article[]): string {
     sql += `  content = EXCLUDED.content,\n`;
     sql += `  cover_image = EXCLUDED.cover_image,\n`;
     sql += `  excerpt = EXCLUDED.excerpt,\n`;
-    sql += `  category = EXCLUDED.category;\n\n`;
+    sql += `  category = EXCLUDED.category,\n`;
+    sql += `  author_id = EXCLUDED.author_id;\n\n`;
   });
 
   // Add cleanup SQL
@@ -557,12 +563,12 @@ function generateSQLInserts(articles: Article[]): string {
 
   sql += `-- Remove category link text from excerpt and content\n`;
   sql += `UPDATE public.articles\n`;
-  sql += `SET \n`;
-  sql += `  excerpt = REGEXP_REPLACE(excerpt, '\\\\[.*?\\\\]\\\\(https?://kemafar\\\\.org/category/[^)]+\\\\)', '', 'g'),\n`;
-  sql += `  content = REGEXP_REPLACE(content, '\\\\[.*?\\\\]\\\\(https?://kemafar\\\\.org/category/[^)]+\\\\)', '', 'g')\n`;
-  sql += `WHERE \n`;
-  sql += `  excerpt ~ '\\\\[.*?\\\\]\\\\(https?://kemafar\\\\.org/category/' OR \n`;
-  sql += `  content ~ '\\\\[.*?\\\\]\\\\(https?://kemafar\\\\.org/category/';\n\n`;
+  sql += `SET\n`;
+  sql += `  excerpt = REGEXP_REPLACE(excerpt, '\\[.*?\\]\\(https?://kemafar\\.org/category/[^)]+\\)', '', 'g'),\n`;
+  sql += `  content = REGEXP_REPLACE(content, '\\[.*?\\]\\(https?://kemafar\\.org/category/[^)]+\\)', '', 'g')\n`;
+  sql += `WHERE\n`;
+  sql += `  excerpt ~ '\\[.*?\\]\\(https?://kemafar\\.org/category/' OR\n`;
+  sql += `  content ~ '\\[.*?\\]\\(https?://kemafar\\.org/category/';\n\n`;
 
   sql += `-- Verification: Check category distribution\n`;
   sql += `SELECT category, COUNT(*) as count \n`;
