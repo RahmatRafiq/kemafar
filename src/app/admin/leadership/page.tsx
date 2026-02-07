@@ -8,27 +8,7 @@ import Link from 'next/link';
 import { Leadership } from '@/types/leadership';
 import { ITEMS_PER_PAGE } from '@/lib/constants/admin';
 import { AdminDataTable } from '@/shared/components/datatables/AdminDataTable';
-
-const POSITION_LABELS: Record<string, string> = {
-  'ketua': 'Ketua',
-  'wakil-ketua': 'Wakil Ketua',
-  'sekretaris': 'Sekretaris',
-  'bendahara': 'Bendahara',
-  'coordinator': 'Koordinator',
-  'member': 'Anggota',
-};
-
-const DIVISION_LABELS: Record<string, string> = {
-  'presidium': 'Presidium',
-  'kaderisasi': 'Kaderisasi',
-  'minat-bakat': 'Minat Bakat',
-  'media-publikasi': 'Media dan Publikasi',
-  'pendidikan-profesi': 'Pendidikan dan Profesi',
-  'logistik-keuangan': 'Logistik dan Keuangan',
-  'akhlak-moral': 'Akhlak dan Moral',
-  'eksternal': 'Eksternal',
-  'kajian-strategis-advokasi': 'Kajian Strategis dan Advokasi',
-};
+import { POSITION_LABELS, DIVISION_LABELS } from '@/lib/constants/leadership';
 
 export default function LeadershipPage() {
   // Confirmation Modal State

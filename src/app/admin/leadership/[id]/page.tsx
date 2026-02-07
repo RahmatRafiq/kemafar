@@ -11,27 +11,7 @@ import { FormActions } from '@/shared/components/FormActions';
 import { LeadershipFormData } from '@/types/forms';
 import { Info, CheckCircle } from 'lucide-react';
 import { getImageUrl } from '@/lib/utils/image';
-
-const POSITIONS = [
-  { value: 'ketua', label: 'Ketua' },
-  { value: 'wakil-ketua', label: 'Wakil Ketua' },
-  { value: 'sekretaris', label: 'Sekretaris' },
-  { value: 'bendahara', label: 'Bendahara' },
-  { value: 'coordinator', label: 'Koordinator' },
-  { value: 'member', label: 'Anggota' },
-];
-
-const DIVISIONS = [
-  { value: 'presidium', label: 'Presidium' },
-  { value: 'kaderisasi', label: 'Kaderisasi' },
-  { value: 'minat-bakat', label: 'Minat Bakat' },
-  { value: 'media-publikasi', label: 'Media dan Publikasi' },
-  { value: 'pendidikan-profesi', label: 'Pendidikan dan Profesi' },
-  { value: 'logistik-keuangan', label: 'Logistik dan Keuangan' },
-  { value: 'akhlak-moral', label: 'Akhlak dan Moral' },
-  { value: 'eksternal', label: 'Eksternal' },
-  { value: 'kajian-strategis-advokasi', label: 'Kajian Strategis dan Advokasi' },
-];
+import { POSITIONS, DIVISIONS } from '@/lib/constants/leadership';
 
 export default function LeadershipFormPage() {
   const params = useParams();
