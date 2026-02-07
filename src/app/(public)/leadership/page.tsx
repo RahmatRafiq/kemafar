@@ -104,7 +104,7 @@ function DivisionSection({
                   fill
                   sizes="80px"
                   loading="lazy"
-                  className="object-cover grayscale group-hover:grayscale-0 transition-all duration-300"
+                  className="object-cover transition-all duration-300"
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
@@ -243,7 +243,7 @@ export default function LeadershipPage() {
                             sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                             priority={index < 4}
                             loading={index < 4 ? "eager" : "lazy"}
-                            className="object-cover grayscale group-hover:grayscale-0 transition-[filter] duration-200"
+                            className="object-cover transition-[filter] duration-200"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-150" />
                         </>
